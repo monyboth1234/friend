@@ -63,8 +63,8 @@ class AuthController extends Controller
 
 
             // Client will go to Homepage
-            if(Auth::user()->role === 'client'){
-                return redirect()->route('hompage');
+            if(Auth::user()->role === 'user'){
+                return redirect()->route('homeforclient');
             }
 
             return redirect()->intended('/dashboard');

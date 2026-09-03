@@ -1,15 +1,31 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Shop - Organic Products</title>
+    <style>
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+        }
+        .product-img {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 
-<!-- Hearder -->
+    <!-- Header Topbar -->
     <div style="background-color: #407109; height: 40px;" class="w-100 d-flex justify-content-between ps-5 pe-5">
         <div class="d-flex gap-5 mt-2">
             <p class="text-white">Please look </p>
@@ -17,164 +33,281 @@
         </div>    
         <div class="d-flex justify-content-around gap-5">
             <select class="bg-transparent border-0 text-white" name="" id="">
-                <option value="">English</option>
-                <option value="">Khmer</option>
-                <option value="">Loa</option>
+                <option value="" class="text-dark">English</option>
+                <option value="" class="text-dark">Khmer</option>
+                <option value="" class="text-dark">Lao</option>
             </select>
             <select class="bg-transparent border-0 text-white" name="" id="">
-                <option value="">USD</option>
-                <option value="">Rial</option>
-                <option value="">Dung</option>
+                <option value="" class="text-dark">USD</option>
+                <option value="" class="text-dark">KHR</option>
             </select>
         </div>
     </div>
 
-
+    <!-- Hero Section -->
     <div class="position-relative">
-
         <img src="https://i.pinimg.com/1200x/e9/b1/67/e9b16750a87a69e8d182899c1a3fed8d.jpg" class="w-100" style="height:400px; object-fit:cover;">
-        
         <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
 
+        <!-- Navbar Overlay -->
         <div class="position-absolute top-0 start-0 w-100 mt-3">
-
             <div class="container d-flex justify-content-between align-items-center">
-
                 <div class="d-flex align-items-center gap-3">
-
-                     <img width="150" src="https://imgs.search.brave.com/WHOTEWAyl_rVGfQLADYZphKn4_KapBRnncpI16sYU0Y/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTEz/MjM2MDM2NC92ZWN0/b3IvdmVjdG9yLWdy/ZWVuLWVtYmxlbS1m/YXJtLWZyZXNoLXdp/dGgtZGVjb3JhdGl2/ZS1sZWF2ZXMtYnJp/Z2h0LWFscGhhYmV0/LWxldHRlcnMtbnVt/YmVycy1hbmQuanBn/P3M9NjEyeDYxMiZ3/PTAmaz0yMCZjPXl1/UDd2b0JiakZVcExm/eXVLaWp6U2dWcUlz/cjMwdHEzQUR6OFJT/dkZKYXM9" alt="">
-
-                    <a href="#" class="text-white text-decoration-none me-4">Home</a>
-                    <a href="#" class="text-white text-decoration-none me-4">Shop</a>
-                    <a href="#" class="text-white text-decoration-none me-4">About</a>
-                    <a href="#" class="text-white text-decoration-none me-4">Pages</a>
-                    <a href="#" class="text-white text-decoration-none me-4">Blog</a>
-                    <a href="#" class="text-white text-decoration-none">Contact</a>
-
+                    <img width="120" src="https://imgs.search.brave.com/WHOTEWAyl_rVGfQLADYZphKn4_KapBRnncpI16sYU0Y/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTEz/MjM2MDM2NC92ZWN0/b3IvdmVjdG9yLWdy/ZWVuLWVtYmxlbS1m/YXJtLWZyZXNoLXdp/dGgtZGVjb3JhdGl2/ZS1sZWF2ZXMtYnJp/Z2h0LWFscGhhYmV0/LWxldHRlcnMtbnVt/YmVycy1hbmQuanBn/P3M9NjEyeDYxMiZ3/PTAmaz0yMCZjPXl1/UDd2b0JiakZVcExm/eXVLaWp6U2dWcUlz/cjMwdHEzQUR6OFJT/dkZKYXM9" alt="Logo" class="rounded-circle bg-white p-1">
+                    <a href="#" class="text-white text-decoration-none me-3 fw-semibold">Home</a>
+                    <a href="#" class="text-white text-decoration-none me-3 fw-semibold">Shop</a>
+                    <a href="#" class="text-white text-decoration-none me-3 fw-semibold">About</a>
+                    <a href="#" class="text-white text-decoration-none me-3 fw-semibold">Pages</a>
+                    <a href="#" class="text-white text-decoration-none me-3 fw-semibold">Blog</a>
+                    <a href="#" class="text-white text-decoration-none fw-semibold">Contact</a>
                 </div>
 
                 <div class="d-flex align-items-center">
-
-                    <input
-                        type="search"
-                        class="form-control me-2"
-                        placeholder="Type Here..."
-                        style="width:220px;">
-
-                    <button class="btn btn-warning me-4">
-                        Search
-                    </button>
-
-                    <a href="/Demo_project//admin//dashboard//dashborads.php" class="text-white text-decoration-none me-3 btn bg-primary ">
-                        Dashboard
-                    </a>
-
-                   <a href="{{ route('register') }}" class="text-white text-decoration-none me-4">
-                        Register
-                    </a>
-                    <a href="{{ route ('login')}}" class="text-white text-decoration-none">
-                        login
-                    </a>
-                </div>
-        </div>
-    </div>
-
-    <!-- Center Text -->
-    <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
-
-        <h1 class="fw-bold">Shop</h1>
-
-        <p class="mb-0">
-            Home / Shop
-        </p>
-
-    </div>
-
-</div>
-
-    <!-- Feature -->
-
-    <div>
-        <h2 style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="text-center mt-5 text-warning">Kind of Healthy</h2>
-        <h1 class="text-center fw-bold" style="color:#407109">Shop Out Organic Product</h1>
-    </div>
-
-
-    <!-- Card -->
-     <div class="row d-flex p-5 justify-content-between">
-        <div class="col col-lg-2 card border-0 ">
-            <img  style="border-radius: 100%;" width="250" src="https://i.pinimg.com/1200x/17/51/39/175139fee4ab5050c15347f075f0abe0.jpg" alt="">
-            <a href="" class="btn fw-bold">Vegetables</a>
-        </div>
-        <div class="col col-lg-2 card border-0  ">
-            <img  style="border-radius: 100%;" width="250" src="https://i.pinimg.com/736x/87/5c/19/875c19f4c3aff56b51416c2295f13145.jpg" alt="">
-            <a href="" class="btn fw-bold">Fruits</a>
-        </div>
-        <div class="col col-lg-2 card border-0  ">
-            <img  style="border-radius: 100%;" width="250" src="https://i.pinimg.com/1200x/02/f1/52/02f1527da53638f41faca5deeb929d91.jpg" alt="">
-            <a href="" class="btn fw-bold">Fresh Nuts</a>
-        </div>
-        <div class="col col-lg-2 card border-0 ">
-            <img  style="border-radius: 100%;" width="250" src="https://i.pinimg.com/736x/b2/96/dc/b296dce2446cf3cb91b52dc058197e09.jpg" alt="">
-            <a href="" class="btn fw-bold">Juices</a>
-        </div>
-        <div class="col col-lg-2 card border-0 ">
-            <img  style="border-radius: 100%;" width="250" src="https://i.pinimg.com/736x/1b/3e/0b/1b3e0b856b8937e09353290c7f9e3f88.jpg" alt="">
-            <a href="" class="btn fw-bold">Eggs</a>
-        </div>
-     </div><br>
-
-
-     <!-- Ruler line -->
-     <div class="w-100">
-        <div class="p-5">
-            <hr class="border-2 text-secondary">
-        </div>
-     </div><br><br>
-
-
-     <!-- Product Card -->
-{{-- 
-<div class="container my-5">
-    <!-- Responsive Row using Bootstrap grid -->
-    <div class="row g-4 justify-content-center">
-
-        <?php while($row = $vegatable->fetch_assoc()): ?>
-
-            <!-- The loop now generates a new column/card for every individual product -->
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="card h-100 border-0 shadow position-relative p-3">
-                    
-                    <!-- Product Image Container -->
-                    <div class="text-center">
-                       <img width="200" src="/Demo_project/admin/Vegetable/<?= $row['p_image'] ?>">
-                    </div>
-
-                    <!-- Discount / Weight Badge Overlay -->
-                    <div class="position-absolute top-0 start-0 ps-3 pt-3">
-                        <span class="badge bg-success fw-bold"><?= $row['p_descount'] ?> Kg</span>
-                    </div>
-                    
-                    <!-- Product Details -->
-                    <div class="card-body px-0 pt-3">
-                        <p class="fw-bold mb-1">Vegetable: <?= $row['p_title'] ?> </p>
-                        <p class="text-muted mb-1">Category: <?= $row['p_category'] ?> </p>
-                        <p class="fw-bold text-success mb-0">Price: $<?= $row['p_price'] ?> </p>
-                    </div>
-
+                    <input type="search" class="form-control me-2" placeholder="Type Here..." style="width:200px;">
+                    <button class="btn btn-warning me-3">Search</button>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary me-2">Dashboard</a>
+                    <a href="{{ route('register') }}" class="text-white text-decoration-none me-3">Register</a>
+                    <a href="{{ route('login') }}" class="text-white text-decoration-none">Login</a>
                 </div>
             </div>
+        </div>
 
-        <?php endwhile; ?>
-
+        <!-- Center Text -->
+        <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
+            <h1 class="fw-bold display-4">Shop</h1>
+            <p class="mb-0 fs-5">Home / Shop</p>
+        </div>
     </div>
-</div> --}}
-       
+
+    <!-- Category Header -->
+    <div class="my-5">
+        <h2 style="font-family:'Lucida Sans', sans-serif" class="text-center text-warning">Kind of Healthy</h2>
+        <h1 class="text-center fw-bold" style="color:#407109">Shop Our Organic Products</h1>
+    </div>
+
+    <!-- Category Icons Circle Cards -->
+    <div class="container mb-5">
+        <div class="row g-4 justify-content-center text-center">
+            <div class="col-6 col-md-2">
+                <a href="#vegetables" class="text-decoration-none text-dark">
+                    <img style="border-radius: 50%; aspect-ratio: 1/1;" class="w-100 shadow-sm mb-2" src="https://i.pinimg.com/1200x/17/51/39/175139fee4ab5050c15347f075f0abe0.jpg" alt="Vegetables">
+                    <span class="btn btn-outline-success border-0 fw-bold w-100">Vegetables</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-2">
+                <a href="#fruits" class="text-decoration-none text-dark">
+                    <img style="border-radius: 50%; aspect-ratio: 1/1;" class="w-100 shadow-sm mb-2" src="https://i.pinimg.com/736x/87/5c/19/875c19f4c3aff56b51416c2295f13145.jpg" alt="Fruits">
+                    <span class="btn btn-outline-success border-0 fw-bold w-100">Fruits</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-2">
+                <a href="#fresh-nuts" class="text-decoration-none text-dark">
+                    <img style="border-radius: 50%; aspect-ratio: 1/1;" class="w-100 shadow-sm mb-2" src="https://i.pinimg.com/1200x/02/f1/52/02f1527da53638f41faca5deeb929d91.jpg" alt="Fresh Nuts">
+                    <span class="btn btn-outline-success border-0 fw-bold w-100">Fresh Nuts</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-2">
+                <a href="#animal-farm" class="text-decoration-none text-dark">
+                    <img style="border-radius: 50%; aspect-ratio: 1/1;" class="w-100 shadow-sm mb-2" src="https://i.pinimg.com/1200x/c2/9a/66/c29a663523a70781d0098a893eb6f4a5.jpg" alt="Animal Farm">
+                    <span class="btn btn-outline-success border-0 fw-bold w-100">Animal Farm</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-2">
+                <a href="#eggs" class="text-decoration-none text-dark">
+                    <img style="border-radius: 50%; aspect-ratio: 1/1;" class="w-100 shadow-sm mb-2" src="https://i.pinimg.com/736x/1b/3e/0b/1b3e0b856b8937e09353290c7f9e3f88.jpg" alt="Eggs">
+                    <span class="btn btn-outline-success border-0 fw-bold w-100">Eggs</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-4">
+        <hr class="border-2 text-secondary">
+    </div>
+
+    <!-- Dynamic Product Cards Sections -->
+    <div class="container my-5">
+
+        <!-- 1. VEGETABLES SECTION -->
+        <div id="vegetables" class="mb-5">
+            <h3 class="fw-bold mb-4 border-start border-4 border-success ps-3" style="color:#407109;">Vegetables</h3>
+            <div class="row g-4">
+                @forelse($vegetables as $item)
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="card border-0 shadow-sm product-card h-100">
+                            
+                            <!-- កែប្រែត្រង់នេះ៖ ដក asset('storage/...') ចេញ ដោយសារ $item->image ជា Cloudinary Link ស្រាប់ -->
+                            <img src="{{ $item->image ?? 'https://via.placeholder.com/200' }}" class="card-img-top product-img" alt="{{ $item->name }}">
+                            
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div>
+                                    <h5 class="card-title fw-bold text-dark">{{ $item->name }}</h5>
+                                    <p class="text-muted small mb-2">{{ Str::limit($item->description ?? '', 50) }}</p>
+                                </div>
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="fs-5 fw-bold text-success">${{ number_format($item->price, 2) }}</span>
+                                        
+                                        <!-- កែប្រែត្រង់នេះ៖ ប្តូរពី $item->quantity ទៅ $item->qty -->
+                                        <span class="badge bg-light text-dark border">Qty: {{ $item->qty }}</span>
+                                    </div>
+                                    <button class="btn btn-success w-100 rounded-pill"><i class="fa-solid fa-cart-plus me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-muted italic ps-3">No vegetable products available.</p>
+                @endforelse
+            </div>
+        </div>
+
+    <div class="container my-4">
+        <hr class="border-2 text-secondary">
+    </div>
 
 
+<!-- 2. FRUITS SECTION -->
+        <div id="fruits" class="mb-5">
+            <h3 class="fw-bold mb-4 border-start border-4 border-warning ps-3 text-warning">Fruits</h3>
+            <div class="row g-4">
+                @forelse($fruits as $item)
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="card border-0 shadow-sm product-card h-100">
+                            <!-- កែប្រែ៖ ដក asset('storage/') ចេញ -->
+                            <img src="{{ $item->image ?? 'https://via.placeholder.com/200' }}" class="card-img-top product-img" alt="{{ $item->name }}">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div>
+                                    <h5 class="card-title fw-bold text-dark">{{ $item->name }}</h5>
+                                    <p class="text-muted small mb-2">{{ Str::limit($item->description ?? '', 50) }}</p>
+                                </div>
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="fs-5 fw-bold text-success">${{ number_format($item->price, 2) }}</span>
+                                        <!-- កែប្រែ៖ ប្តូរពី $item->quantity ទៅ $item->qty -->
+                                        <span class="badge bg-light text-dark border">Qty: {{ $item->qty }}</span>
+                                    </div>
+                                    <button class="btn btn-success w-100 rounded-pill"><i class="fa-solid fa-cart-plus me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-muted italic ps-3">No fruit products available.</p>
+                @endforelse
+            </div>
+        </div>
+
+    <div class="container my-4">
+        <hr class="border-2 text-secondary">
+    </div>
 
 
-    <!-- Footer -->
+        <!-- 3. FRESH NUTS SECTION -->
+        <div id="fresh-nuts" class="mb-5">
+            <h3 class="fw-bold mb-4 border-start border-4 border-secondary ps-3 text-secondary">Fresh Nuts</h3>
+            <div class="row g-4">
+                @forelse($freshNuts as $item)
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="card border-0 shadow-sm product-card h-100">
+                            <!-- កែប្រែ៖ ដក asset('storage/') ចេញ -->
+                            <img src="{{ $item->image ?? 'https://via.placeholder.com/200' }}" class="card-img-top product-img" alt="{{ $item->name }}">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div>
+                                    <h5 class="card-title fw-bold text-dark">{{ $item->name }}</h5>
+                                    <p class="text-muted small mb-2">{{ Str::limit($item->description ?? '', 50) }}</p>
+                                </div>
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="fs-5 fw-bold text-success">${{ number_format($item->price, 2) }}</span>
+                                        <!-- កែប្រែ៖ ប្តូរពី $item->quantity ទៅ $item->qty -->
+                                        <span class="badge bg-light text-dark border">Qty: {{ $item->qty }}</span>
+                                    </div>
+                                    <button class="btn btn-success w-100 rounded-pill"><i class="fa-solid fa-cart-plus me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-muted italic ps-3">No fresh nut products available.</p>
+                @endforelse
+            </div>
+        </div>
+
+    <div class="container my-4">
+        <hr class="border-2 text-secondary">
+    </div>
+
+
+        <!-- 4. ANIMAL FARM SECTION -->
+        <div id="animal-farm" class="mb-5">
+            <h3 class="fw-bold mb-4 border-start border-4 border-info ps-3 text-info">Animal Farm</h3>
+            <div class="row g-4">
+                @forelse($animalFarms as $item)
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="card border-0 shadow-sm product-card h-100">
+                            <!-- កែប្រែ៖ ដក asset('storage/') ចេញ -->
+                            <img src="{{ $item->image ?? 'https://via.placeholder.com/200' }}" class="card-img-top product-img" alt="{{ $item->name }}">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div>
+                                    <h5 class="card-title fw-bold text-dark">{{ $item->name }}</h5>
+                                    <p class="text-muted small mb-2">{{ Str::limit($item->description ?? '', 50) }}</p>
+                                </div>
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="fs-5 fw-bold text-success">${{ number_format($item->price, 2) }}</span>
+                                        <!-- កែប្រែ៖ ប្តូរពី $item->quantity ទៅ $item->qty -->
+                                        <span class="badge bg-light text-dark border">Qty: {{ $item->qty }}</span>
+                                    </div>
+                                    <button class="btn btn-success w-100 rounded-pill"><i class="fa-solid fa-cart-plus me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-muted italic ps-3">No animal farm products available.</p>
+                @endforelse
+            </div>
+        </div>
+
+
+    <div class="container my-4">
+        <hr class="border-2 text-secondary">
+    </div>
+
+
+        <!-- 5. EGGS SECTION -->
+        <div id="eggs" class="mb-5">
+            <h3 class="fw-bold mb-4 border-start border-4 border-warning ps-3 text-warning">Eggs</h3>
+            <div class="row g-4">
+                @forelse($eggs as $item)
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="card border-0 shadow-sm product-card h-100">
+                            <!-- កែប្រែ៖ ដក asset('storage/') ចេញ -->
+                            <img src="{{ $item->image ?? 'https://via.placeholder.com/200' }}" class="card-img-top product-img" alt="{{ $item->name }}">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div>
+                                    <h5 class="card-title fw-bold text-dark">{{ $item->name }}</h5>
+                                    <p class="text-muted small mb-2">{{ Str::limit($item->description ?? '', 50) }}</p>
+                                </div>
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="fs-5 fw-bold text-success">${{ number_format($item->price, 2) }}</span>
+                                        <!-- កែប្រែ៖ ប្តូរពី $item->quantity ទៅ $item->qty -->
+                                        <span class="badge bg-light text-dark border">Qty: {{ $item->qty }}</span>
+                                    </div>
+                                    <button class="btn btn-success w-100 rounded-pill"><i class="fa-solid fa-cart-plus me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-muted italic ps-3">No egg products available.</p>
+                @endforelse
+            </div>
+        </div>
+
+   <!-- Footer -->
      <div style="background-color: #0E4A32;" class="w-100 p-5 h-100 ">
         <div class="d-flex justify-content-center gap-5 ">
             <div class="">
@@ -272,6 +405,6 @@
         <p class="fw-bold">Terms and Conditional  |  Privacy Policy</p>
      </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
