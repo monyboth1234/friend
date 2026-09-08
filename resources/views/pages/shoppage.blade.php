@@ -119,6 +119,8 @@
                 {{ $vegetables->count() + $fruits->count() + $freshNuts->count() + $animalFarms->count() + $eggs->count() }}
                 result(s)
             </p>
+        @elseif($category)
+            <h1 class="mb-4">{{ ucfirst(str_replace('-', ' ', $category)) }}</h1>
         @else
             <h1 class="mb-4">Shop</h1>
         @endif
@@ -131,7 +133,7 @@
                 && $eggs->isEmpty();
         @endphp
 
-        @if($search !== '' && $allEmpty)
+        @if(($search !== '' || $category) && $allEmpty)
             <div class="text-center py-5">
                 <i class="bi bi-search text-muted opacity-50 display-1"></i>
                 <h3 class="h5 fw-bold text-dark mt-3">No products found</h3>
@@ -139,12 +141,12 @@
                 <a href="{{ route('shoppage') }}" class="btn btn-outline-success rounded-5 px-4">Clear Search</a>
             </div>
         @else
-            @if($search === '')
+            @if($search === '' && !$category)
                 <!-- Vegetables Section -->
                 <h2 class="text-center fw-bold mb-4">Vegetables</h2>
             @endif
             @if($vegetables->isEmpty())
-                @if($search === '')
+                @if($search === '' && !$category)
                     <p class="text-muted text-center mb-5">No vegetables available right now.</p>
                 @endif
             @else
@@ -163,7 +165,7 @@
                                     </p>
                                     <div class="d-flex align-items-center justify-content-between mt-2">
                                         <span class="fw-bold text-success">${{ number_format($vegetable->price, 2) }}</span>
-                                        <button class="btn btn-outline-success btn-sm add-to-cart rounded-5" data-product-id="{{ $vegetable->id }}">add to cart</button>
+                                        <button class="btn btn-outline-success btn-sm add-to-cart rounded-5" data-product-id="{{ $vegetable->id }}" data-product-type="vegetable">add to cart</button>
                                     </div>
                                 </div>
                             </div>
@@ -172,12 +174,12 @@
                 </div>
             @endif
 
-            @if($search === '')
+            @if($search === '' && !$category)
                 <!-- Farm_Animal Section -->
                 <h2 class="text-center fw-bold mb-4">Farm Animal</h2>
             @endif
             @if($animalFarms->isEmpty())
-                @if($search === '')
+                @if($search === '' && !$category)
                     <p class="text-muted text-center mb-5">No farm animals available right now.</p>
                 @endif
             @else
@@ -196,7 +198,7 @@
                                     </p>
                                     <div class="d-flex align-items-center justify-content-between mt-2">
                                         <span class="fw-bold text-success">${{ number_format($farmanimal->price, 2) }}</span>
-                                        <button class="btn btn-outline-success btn-sm add-to-cart rounded-5" data-product-id="{{ $farmanimal->id }}">add to cart</button>
+                                        <button class="btn btn-outline-success btn-sm add-to-cart rounded-5" data-product-id="{{ $farmanimal->id }}" data-product-type="farmanimal">add to cart</button>
                                     </div>
                                 </div>
                             </div>
@@ -205,12 +207,12 @@
                 </div>
             @endif
 
-            @if($search === '')
+            @if($search === '' && !$category)
                 <!-- Fresh_Nut Section -->
                 <h2 class="text-center fw-bold mb-4">Fresh Nuts</h2>
             @endif
             @if($freshNuts->isEmpty())
-                @if($search === '')
+                @if($search === '' && !$category)
                     <p class="text-muted text-center mb-5">No fresh nuts available right now.</p>
                 @endif
             @else
@@ -229,7 +231,7 @@
                                     </p>
                                     <div class="d-flex align-items-center justify-content-between mt-2">
                                         <span class="fw-bold text-success">${{ number_format($freshnut->price, 2) }}</span>
-                                        <button class="btn btn-outline-success btn-sm add-to-cart rounded-5" data-product-id="{{ $freshnut->id }}">add to cart</button>
+                                        <button class="btn btn-outline-success btn-sm add-to-cart rounded-5" data-product-id="{{ $freshnut->id }}" data-product-type="freshnut">add to cart</button>
                                     </div>
                                 </div>
                             </div>
@@ -238,12 +240,12 @@
                 </div>
             @endif
 
-            @if($search === '')
+            @if($search === '' && !$category)
                 <!-- Egg Section -->
                 <h2 class="text-center fw-bold mb-4">Eggs</h2>
             @endif
             @if($eggs->isEmpty())
-                @if($search === '')
+                @if($search === '' && !$category)
                     <p class="text-muted text-center mb-5">No eggs available right now.</p>
                 @endif
             @else
@@ -262,7 +264,7 @@
                                     </p>
                                     <div class="d-flex align-items-center justify-content-between mt-2">
                                         <span class="fw-bold text-success">${{ number_format($egg->price, 2) }}</span>
-                                        <button class="btn btn-outline-success btn-sm add-to-cart rounded-5" data-product-id="{{ $egg->id }}">add to cart</button>
+                                        <button class="btn btn-outline-success btn-sm add-to-cart rounded-5" data-product-id="{{ $egg->id }}" data-product-type="egg">add to cart</button>
                                     </div>
                                 </div>
                             </div>
@@ -271,12 +273,12 @@
                 </div>
             @endif
 
-            @if($search === '')
+            @if($search === '' && !$category)
                 <!-- Fruits Section -->
                 <h2 class="text-center fw-bold mb-4">Fruits</h2>
             @endif
             @if($fruits->isEmpty())
-                @if($search === '')
+                @if($search === '' && !$category)
                     <p class="text-muted text-center mb-5">No fruits available right now.</p>
                 @endif
             @else
@@ -323,13 +325,15 @@
             // Vegetable / Farm Animal / Fresh Nut / Egg Cart Button
             document.querySelectorAll('.add-to-cart').forEach(button => {
                 button.addEventListener('click', function() {
-                    const productId = this.dataset.productId;
+                    const productId   = this.dataset.productId;
+                    const productType = this.dataset.productType || '';
                     fetch(`/cart/add/${productId}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': csrfToken
-                        }
+                        },
+                        body: JSON.stringify({ type: productType })
                     })
                     .then(response => response.json())
                     .then(data => {
@@ -353,7 +357,8 @@
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': csrfToken
-                        }
+                        },
+                        body: JSON.stringify({ type: 'fruit' })
                     })
                     .then(response => response.json())
                     .then(data => {

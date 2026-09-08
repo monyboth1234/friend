@@ -13,12 +13,25 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+
+            // Customer
             $table->string('customer_name');
-            $table->string('customer_email');
+            $table->string('customer_phone');
+            $table->string('customer_email')->nullable();
+            $table->text('customer_address');
+            $table->string('customer_city');
+            $table->string('postal_code')->nullable();
+
+            // Delivery
+            $table->date('delivery_date')->nullable();
+            $table->text('order_notes')->nullable();
+
+            // Product
             $table->string('category');
             $table->string('item_name');
             $table->integer('quantity');
             $table->decimal('total_price', 10, 2);
+
             $table->timestamps();
         });
     }

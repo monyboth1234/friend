@@ -11,6 +11,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Khmer Font -->
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -167,18 +169,23 @@
                         </li>
                     </ul>
                 </li>
-
                 <li>
                     <div class="px-3 py-2 text-uppercase text-white-50 fw-bold style-sm" style="font-size: 0.75rem; letter-spacing: 1px;">
                         Other
                     </div>
-                    <a href=" {{ route('sales.report') }} " class="nav-link d-flex align-items-center">
-                        <i class="bi bi-bag-check-fill me-2 fs-5"></i>
-                        <span>ទទួលការបញ្ជាទិញ</span>
+                    <a href="{{ route('sales.report') }}" class="nav-link sub-nav-link d-flex align-items-center">
+                        <i class="bi bi-graph-up-arrow me-2 fs-5"></i>
+                        <span>របាយការណ៍ការលក់</span>
                     </a>
                 </li>
-
-
+                <li>
+                    <a href="{{ route('report') }}" class="nav-link sub-nav-link d-flex align-items-center">
+                        <i class="bi bi-graph-up-arrow me-2 fs-5"></i>
+                        <span>Report and rate
+                        </span>
+                    </a>
+                </li>
+                
                 <hr class="border-light opacity-25">
 
                 <li class="nav-item">
@@ -328,6 +335,29 @@
 
         </div>
 
+        <!-- Inventory Trend Chart -->
+        <div class="card border-0 shadow-sm rounded-3 mb-4">
+            <div class="card-header bg-white py-3 border-bottom d-flex flex-wrap gap-3 justify-content-between align-items-center">
+                <div>
+                    <h5 class="fw-bold mb-0 text-secondary"><i class="bi bi-graph-up-arrow me-2 text-success"></i>Inventory quantity trend</h5>
+                    <small class="text-muted">Quantities added to Egg, Farm Animals, Fresh Nut, Fruit, and Vegetable</small>
+                </div>
+                <form method="GET" action="{{ route('dashboard') }}" class="d-flex align-items-center gap-2">
+                    <label for="chart_period" class="visually-hidden">Chart period</label>
+                    <select id="chart_period" name="chart_period" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="day" @selected($chartPeriod === 'day')>Daily (last 7 days)</option>
+                        <option value="month" @selected($chartPeriod === 'month')>Monthly (this year)</option>
+                        <option value="year" @selected($chartPeriod === 'year')>Yearly (last 5 years)</option>
+                    </select>
+                </form>
+            </div>
+            <div class="card-body">
+                <div style="height: 340px;">
+                    <canvas id="inventoryTrendChart"></canvas>
+                </div>
+            </div>
+        </div>
+
         <!-- Data Table Section -->
         <div class="card border-0 shadow-sm rounded-3">
             <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
@@ -366,5 +396,32 @@
 
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const inventoryChart = document.getElementById('inventoryTrendChart');
+
+        new Chart(inventoryChart, {
+            type: 'line',
+            data: {
+                labels: @json($chart['labels']),
+                datasets: [
+                    { label: 'Egg', data: @json($chart['series']['Egg']), borderColor: '#f59f00', backgroundColor: '#f59f00', tension: 0.3, fill: false },
+                    { label: 'Farm Animals', data: @json($chart['series']['Farm Animals']), borderColor: '#0dcaf0', backgroundColor: '#0dcaf0', tension: 0.3, fill: false },
+                    { label: 'Fresh Nut', data: @json($chart['series']['Fresh Nut']), borderColor: '#6f42c1', backgroundColor: '#6f42c1', tension: 0.3, fill: false },
+                    { label: 'Fruit', data: @json($chart['series']['Fruit']), borderColor: '#dc3545', backgroundColor: '#dc3545', tension: 0.3, fill: false },
+                    { label: 'Vegetable', data: @json($chart['series']['Vegetable']), borderColor: '#198754', backgroundColor: '#198754', tension: 0.3, fill: false },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: { legend: { position: 'bottom' } },
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: 'Quantity added' }, ticks: { precision: 0 } },
+                    x: { title: { display: true, text: @json($chartPeriod === 'day' ? 'Day' : ($chartPeriod === 'month' ? 'Month' : 'Year')) } },
+                },
+            },
+        });
+    </script>
 </body>
 </html>

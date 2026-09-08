@@ -2,57 +2,96 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Order;
 
 class SalesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $currentYear = date('Y');
-        $today = date('Y-m-d');
+        $request->validate([
+            'sale_date' => ['nullable', 'date'],
+        ]);
 
-       
-        // ១. ទាញយកបញ្ជីកុម្ម៉ង់ទាំងអស់ 
+        // The daily chart is based on the sale date selected in the report.
+        // Default to today when no date has been selected.
+        $selectedDate = $request->filled('sale_date')
+            ? Carbon::parse($request->input('sale_date'))->toDateString()
+            : now()->toDateString();
 
-        $orders = Order::select('customer_name', 'customer_email', 'category', 'item_name', 'quantity', 'total_price')
-            ->latest()
-            ->get();
+        // ==========================================
+        // 1. All Orders
+        // ==========================================
+
+        $orders = Order::select(
+            'customer_name',
+            'customer_email',
+            'category',
+            'item_name',
+            'quantity',
+            'total_price'
+        )
+        ->latest()
+        ->get();
 
 
-        // ២. ទាញទិន្នន័យប្រចាំថ្ងៃ (កែពី 'farm__animals' មកជា 'farm_animals')
+        // ==========================================
+        // 2. Daily Sales
+        // ==========================================
 
         $dailySales = [
-            'vegetable'  => DB::table('vegetables')->whereDate('created_at', $today)->sum('qty'),
-            'fresh_nut'  => DB::table('fresh_nuts')->whereDate('created_at', $today)->sum('qty'),
-            'fruit'      => DB::table('fruits')->whereDate('created_at', $today)->sum('qty'),
-            'egg'        => DB::table('eggs')->whereDate('created_at', $today)->sum('qty'),
-            'farmanimal' => DB::table('farm__animals')->whereDate('created_at', $today)->sum('qty'),
+            'vegetable' => Order::whereDate('created_at', $selectedDate)
+                ->where('category', 'Vegetable')
+                ->sum('quantity'),
+
+            'fresh_nut' => Order::whereDate('created_at', $selectedDate)
+                ->where('category', 'Fresh Nut')
+                ->sum('quantity'),
+
+            'fruit' => Order::whereDate('created_at', $selectedDate)
+                ->where('category', 'Fruit')
+                ->sum('quantity'),
+
+            'egg' => Order::whereDate('created_at', $selectedDate)
+                ->where('category', 'Egg')
+                ->sum('quantity'),
+
+            'farmanimal' => Order::whereDate('created_at', $selectedDate)
+                ->where('category', 'Farm Animal')
+                ->sum('quantity'),
         ];
 
         $dailySalesChartData = array_values($dailySales);
 
 
-        // ៣. ទាញទិន្នន័យប្រចាំខែសម្រាប់ Line Chart
+        // ==========================================
+        // 3. Monthly Sales
+        // ==========================================
 
-        $tables = [
-            'vegetable'  => 'vegetables',
-            'fresh_nut'  => 'fresh_nuts',
-            'fruit'      => 'fruits',
-            'egg'        => 'eggs',
-            'farmanimal' => 'farm__animals',
+        $categories = [
+            'vegetable' => 'Vegetable',
+            'fresh_nut' => 'Fresh Nut',
+            'fruit' => 'Fruit',
+            'egg' => 'Egg',
+            'farmanimal' => 'Farm Animal',
         ];
 
         $monthlySales = [];
 
-        foreach ($tables as $key => $tableName) {
+        foreach ($categories as $key => $category) {
+
             $monthlyData = array_fill(1, 12, 0);
 
-            $salesFromDb = DB::table($tableName)
-                ->select(DB::raw('MONTH(created_at) as month'), DB::raw('SUM(qty) as total_qty'))
+            $salesFromDb = Order::select(
+                    DB::raw('MONTH(created_at) as month'),
+                    DB::raw('SUM(quantity) as total_qty')
+                )
                 ->whereYear('created_at', $currentYear)
-                ->groupBy('month')
+                ->where('category', $category)
+                ->groupBy(DB::raw('MONTH(created_at)'))
                 ->pluck('total_qty', 'month')
                 ->toArray();
 
@@ -64,8 +103,18 @@ class SalesController extends Controller
         }
 
 
-        // ៤. ផ្ញើទិន្នន័យទៅកាន់ Blade View
+        // ==========================================
+        // 4. Return View
+        // ==========================================
 
-        return view('pages.sales-report', compact('orders', 'dailySalesChartData', 'monthlySales'));
+        return view(
+            'pages.sales-report',
+            compact(
+                'orders',
+                'selectedDate',
+                'dailySalesChartData',
+                'monthlySales'
+            )
+        );
     }
 }

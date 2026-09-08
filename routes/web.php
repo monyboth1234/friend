@@ -9,11 +9,18 @@ use App\Http\Controllers\EggController;
 use App\Http\Controllers\FarmAnimalController;
 use App\Http\Controllers\FreshNutController;
 use App\Http\Controllers\FruitController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VegetableController;
+use App\Models\Vegetable;
+use App\Models\Fruit;
+use App\Models\FreshNut;
+use App\Models\Egg;
+use App\Models\Farm_Animal;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -38,9 +45,8 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 
 // Homepage
-Route::get('/homepage', function () {
-    return view('pages.homepage');
-})->name('homepage');
+Route::get('/homepage', [ShopController::class, 'index'])
+    ->name('homepage');
 
 
 // Homepage Client
@@ -197,6 +203,44 @@ Route::get('/users', [UserController::class, 'index'])
     ->name('users.index');
 
 
-// Other
+// sales-report
 Route::get('/sales-report', [SalesController::class, 'index'])
     ->name('sales.report');
+
+// reviews report
+Route::get('/report', [ReviewController::class, 'report'])
+    ->name('report');
+
+// Order
+Route::post('/orders', [OrderController::class, 'store'])
+    ->name('orders.store');
+
+
+// show vegetable
+Route::get('/showproduct/vegetable', function () {
+    $products = Vegetable::latest()->get();
+    return view('showproduct.Vegetable', compact('products'));
+})->name('showproduct.Vegetable');
+
+Route::get('/showproduct/fruit', function () {
+    $products = Fruit::latest()->get();
+    return view('showproduct.Fruit', compact('products'));
+})->name('showproduct.Fruit');
+
+Route::get('/showproduct/freshnut', function () {
+    $products = FreshNut::latest()->get();
+    return view('showproduct.Freshnut', compact('products'));
+})->name('showproduct.Freshnut');
+
+Route::get('/showproduct/egg', function () {
+    $products = Egg::latest()->get();
+    return view('showproduct.Egg', compact('products'));
+})->name('showproduct.Egg');
+
+Route::get('/showproduct/farmanimal', function () {
+    $products = Farm_Animal::latest()->get();
+    return view('showproduct.Farmanimal', compact('products'));
+})->name('showproduct.Farmanimal');
+
+Route::get('/product/{id}', [ProductController::class, 'show'])
+    ->name('product.show');

@@ -186,8 +186,8 @@
             <div class="d-flex align-items-center mb-3 px-2">
                 <i class="bi bi-person-circle fs-2 me-2 text-white"></i>
                 <div class="lh-sm text-truncate">
-                    <div class="fw-bold text-white text-truncate">{{ Auth::user()->name }}</div>
-                    <small class="text-white-50">{{ Auth::user()->role }}</small>
+                    <div class="fw-bold text-white text-truncate">{{ Auth::user()->name ?? 'Guest' }}</div>
+                    <small class="text-white-50">{{ Auth::user()->role ?? 'visitor' }}</small>
                 </div>
             </div>
             <form action="{{ route('logout') }}" method="POST">
@@ -206,12 +206,13 @@
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom bg-white p-3 rounded-3 shadow-sm">
             <div>
                 <h3 class="fw-bold mb-1 text-success">របាយការណ៍ការលក់ (Sales Report)</h3>
-                <span class="text-muted"><i class="bi bi-envelope me-1"></i> អ៊ីមែល៖ {{ Auth::user()->email }}</span>
+                <span class="text-muted"><i class="bi bi-envelope me-1"></i> អ៊ីមែល៖ {{ Auth::user()->email ?? 'guest' }}</span>
             </div>
             <span class="badge bg-success-subtle text-success fs-6 p-2 fw-semibold">
                 <i class="bi bi-calendar-event me-1"></i> ឆ្នាំ {{ date('Y') }}
             </span>
         </div>
+
 
         <!-- Dynamic Summary Cards -->
         <div class="row g-3 mb-4">
@@ -250,7 +251,7 @@
                             <i class="bi bi-box-seam fs-3"></i>
                         </div>
                         <div>
-                            <h6 class="card-subtitle text-muted mb-1">បរិមាណលក់ប្រចាំថ្ងៃ (Today's Items)</h6>
+                            <h6 class="card-subtitle text-muted mb-1">បរិមាណលក់ថ្ងៃទី {{ \Carbon\Carbon::parse($selectedDate)->format('d/m/Y') }}</h6>
                             <h4 class="card-title fw-bold mb-0 text-dark">{{ number_format(array_sum($dailySalesChartData)) }}</h4>
                         </div>
                     </div>
@@ -258,19 +259,25 @@
             </div>
         </div>
 
+        <!-- Date filter for daily sales chart -->
+        <form action="{{ route('sales.report') }}" method="GET" class="card border-0 shadow-sm rounded-3 mb-4">
+            <div class="card-body d-flex flex-wrap align-items-end gap-3">
+                <div>
+                    <label for="sale_date" class="form-label fw-semibold text-secondary mb-1">
+                        <i class="bi bi-calendar-date me-1 text-success"></i>ជ្រើសរើសថ្ងៃលក់ (Select sale date)
+                    </label>
+                    <input type="date" id="sale_date" name="sale_date" class="form-control"
+                           value="{{ $selectedDate }}" max="{{ now()->toDateString() }}">
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-funnel me-1"></i>បង្ហាញក្រាហ្វ
+                </button>
+                <a href="{{ route('sales.report') }}" class="btn btn-outline-secondary">ថ្ងៃនេះ</a>
+            </div>
+        </form>
+
         <!-- Visual Charts Section -->
         <div class="row g-4 mb-4">
-            <div class="col-lg-5">
-                <div class="card border-0 shadow-sm rounded-3 h-100">
-                    <div class="card-header bg-white border-0 fw-bold text-secondary pt-3">
-                        <i class="bi bi-pie-chart-fill me-2 text-success"></i>ការលក់ប្រចាំថ្ងៃតាមប្រភេទ (Daily Sales)
-                    </div>
-                    <div class="card-body d-flex justify-content-center align-items-center">
-                        <canvas id="dailySalesChart" style="max-height: 280px;"></canvas>
-                    </div>
-                </div>
-            </div>
-
             <div class="col-lg-7">
                 <div class="card border-0 shadow-sm rounded-3 h-100">
                     <div class="card-header bg-white border-0 fw-bold text-secondary pt-3">
@@ -278,6 +285,17 @@
                     </div>
                     <div class="card-body">
                         <canvas id="monthlySalesChart" style="max-height: 280px;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm rounded-3 h-100">
+                    <div class="card-header bg-white border-0 fw-bold text-secondary pt-3">
+                        <i class="bi bi-pie-chart-fill me-2 text-success"></i>ការលក់ថ្ងៃទី {{ \Carbon\Carbon::parse($selectedDate)->format('d/m/Y') }} តាមប្រភេទ
+                    </div>
+                    <div class="card-body d-flex justify-content-center align-items-center">
+                        <canvas id="dailySalesChart" style="max-height: 280px;"></canvas>
                     </div>
                 </div>
             </div>

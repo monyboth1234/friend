@@ -14,6 +14,12 @@ class ClientshopController extends Controller
     public function shoppage(Request $request)
     {
         $search = trim((string) $request->query('search', ''));
+        $category = $request->query('category');
+        $validCategories = ['vegetables', 'fruits', 'fresh-nuts', 'farm-animals', 'eggs', 'juices'];
+
+        if (!in_array($category, $validCategories, true)) {
+            $category = null;
+        }
 
         $query = function ($q) use ($search) {
             if ($search !== '') {
@@ -24,11 +30,11 @@ class ClientshopController extends Controller
             }  
         };
 
-        $vegetables  = Vegetable::latest()->when($search, $query)->get();
-        $fruits      = Fruit::latest()->when($search, $query)->get();
-        $freshNuts   = FreshNut::latest()->when($search, $query)->get();
-        $animalFarms = Farm_Animal::latest()->when($search, $query)->get();
-        $eggs        = Egg::latest()->when($search, $query)->get();
+        $vegetables  = Vegetable::latest()->when($search, $query)->when($category && $category !== 'vegetables', fn ($q) => $q->whereRaw('1 = 0'))->get();
+        $fruits      = Fruit::latest()->when($search, $query)->when($category && $category !== 'fruits', fn ($q) => $q->whereRaw('1 = 0'))->get();
+        $freshNuts   = FreshNut::latest()->when($search, $query)->when($category && $category !== 'fresh-nuts', fn ($q) => $q->whereRaw('1 = 0'))->get();
+        $animalFarms = Farm_Animal::latest()->when($search, $query)->when($category && $category !== 'farm-animals', fn ($q) => $q->whereRaw('1 = 0'))->get();
+        $eggs        = Egg::latest()->when($search, $query)->when($category && $category !== 'eggs', fn ($q) => $q->whereRaw('1 = 0'))->get();
 
         return view('pages.shoppage', compact(
             'vegetables',
@@ -36,7 +42,8 @@ class ClientshopController extends Controller
             'freshNuts',
             'animalFarms',
             'eggs',
-            'search'
+            'search',
+            'category'
         ));
     }
 }

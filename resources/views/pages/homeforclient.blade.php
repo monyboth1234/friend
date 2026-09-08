@@ -777,6 +777,9 @@
                 min-height: 55px;
             }
         }
+         /* ================= HEADER & TOP BAR ================= */
+
+
     </style>
 </head>
 <body>
@@ -861,11 +864,7 @@
 
                     <!-- DASHBOARD -->
 
-                    <li class="nav-item ms-lg-2">
-
-                        
-
-                    </li>
+                    <li class="nav-item ms-lg-2"></li>
 
 
                     <!-- REGISTER -->
@@ -1165,7 +1164,7 @@
             </div>
 
             <h2 class="section-title mt-2">
-                Shop Our Organic Products
+               SEE ALL PRODUCTS
             </h2>
 
             <div class="orange-line"></div>
@@ -1181,7 +1180,7 @@
             <div class="col">
 
                 <a
-                    href="{{ route('user.vegetable') }}"
+                    href="{{ route('showproduct.Vegetable') }}"
                     class="product-category">
 
                     <div class="product-image-circle">
@@ -1206,7 +1205,7 @@
             <div class="col">
 
                 <a
-                    href="{{ route('user.fruits') }}"
+                    href="{{ route('showproduct.Fruit') }}"
                     class="product-category">
 
                     <div class="product-image-circle">
@@ -1231,7 +1230,7 @@
             <div class="col">
 
                 <a
-                    href="{{ route('user.fresh-nuts') }}"
+                    href="{{ route('showproduct.Freshnut') }}"
                     class="product-category">
 
                     <div class="product-image-circle">
@@ -1256,19 +1255,19 @@
             <div class="col">
 
                 <a
-                    href="{{ route('user.juices') }}"
+                    href="{{ route('showproduct.Farmanimal') }}"
                     class="product-category">
 
                     <div class="product-image-circle">
 
                         <img
-                            src="https://i.pinimg.com/736x/b2/96/dc/b296dce2446cf3cb91b52dc058197e09.jpg"
+                            src="https://i.pinimg.com/736x/6b/ac/b8/6bacb8590a4fdf6f9fc7f7b13f734cd5.jpg"
                             alt="Juices">
 
                     </div>
 
                     <h3>
-                        Juices
+                        Farm animal
                     </h3>
 
                 </a>
@@ -1281,7 +1280,7 @@
             <div class="col">
 
                 <a
-                    href="{{ route('user.eggs') }}"
+                    href="{{ route('showproduct.Egg') }}"
                     class="product-category">
 
                     <div class="product-image-circle">
@@ -1446,7 +1445,7 @@
                     <div class="farmer-border"></div>
 
                     <img
-                        src="https://images.unsplash.com/photo-1595273670150-bd0c3c392e46?w=600&auto=format&fit=crop&q=80"
+                        src=""
                         alt="Farmer"
                         class="farmer-image">
 

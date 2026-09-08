@@ -17,8 +17,40 @@ class ReviewController extends Controller
 
         return response()->json([
             'total_reviews' => $reviews->count(),
+            'average_rating' => round((float) $reviews->avg('rating'), 1),
             'reviews'       => $reviews,
         ]);
+    }
+
+    public function report()
+    {
+        $reviews = Review::latest()->get();
+
+        $averageRating = round((float) $reviews->avg('rating'), 1);
+
+        $starCounts = [
+            5 => $reviews->where('rating', 5)->count(),
+            4 => $reviews->where('rating', 4)->count(),
+            3 => $reviews->where('rating', 3)->count(),
+            2 => $reviews->where('rating', 2)->count(),
+            1 => $reviews->where('rating', 1)->count(),
+        ];
+
+        $total = $reviews->count() ?: 1;
+
+        $byProduct = $reviews->groupBy('product_type')
+            ->map(fn ($items) => [
+                'count' => $items->count(),
+                'average' => round((float) $items->avg('rating'), 1),
+            ]);
+
+        return view('report.report', compact(
+            'reviews',
+            'averageRating',
+            'byProduct',
+            'starCounts',
+            'total'
+        ));
     }
 
     public function store(Request $request)

@@ -197,9 +197,9 @@
                     <div class="px-3 py-2 text-uppercase text-white-50 fw-bold style-sm" style="font-size: 0.75rem; letter-spacing: 1px;">
                         Other
                     </div>
-                    <a href="#" class="nav-link d-flex align-items-center">
-                        <i class="bi bi-bag-check-fill me-2 fs-5"></i>
-                        <span>ទទួលការបញ្ជាទិញ</span>
+                    <a href="{{ route('sales.report') }}" class="nav-link sub-nav-link d-flex align-items-center">
+                        <i class="bi bi-graph-up-arrow me-2 fs-5"></i>
+                        <span>របាយការណ៍ការលក់</span>
                     </a>
                 </li>
 

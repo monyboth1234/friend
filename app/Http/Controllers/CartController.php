@@ -70,6 +70,7 @@ class CartController extends Controller
                 'price'    => 0,
                 'quantity' => 1,
                 'image'    => '',
+                'model'    => $type,
             ], $item);
         }
 
@@ -83,12 +84,15 @@ class CartController extends Controller
 
     public function add(Request $request, int $id)
     {
-        $product = $this->findProduct($id);
+        $type    = $request->input('type');
+        $product = $this->findProduct($id, $type);
         if (!$product) {
             return response()->json(['success' => false, 'message' => 'Product not found'], 404);
         }
 
-        return response()->json($this->addToCart('product', $id, [
+        $modelSlug = $this->detectModelSlug($product);
+
+        return response()->json($this->addToCart($modelSlug, $id, [
             'name'  => $product->name ?? '',
             'price' => (float) ($product->price ?? 0),
             'image' => $product->image ?? '',
@@ -111,14 +115,35 @@ class CartController extends Controller
 
     public function addJuice(Request $request, int $id)
     {
-        // No Juice model exists yet; return a graceful response.
         return response()->json(['success' => false, 'message' => 'Juice products not available'], 404);
     }
 
-    protected function adjust(Request $request, string $type, int|string $id, int $delta): array
+    protected function detectModelSlug($product): string
+    {
+        return match (true) {
+            $product instanceof Vegetable  => 'vegetable',
+            $product instanceof FreshNut   => 'freshnut',
+            $product instanceof Egg        => 'egg',
+            $product instanceof Farm_Animal => 'farmanimal',
+            $product instanceof Fruit      => 'fruit',
+            default => 'product',
+        };
+    }
+
+    protected function adjust(Request $request, int|string $id, int $delta): array
     {
         $cart = session()->get('cart', []);
-        $key  = $this->key($type, $id);
+        $type = $request->input('type');
+
+        $key = $type ? $this->key($type, $id) : $this->findKeyById($cart, $id);
+
+        if (!$key) {
+            return [
+                'success'  => false,
+                'message'  => 'Item not found in cart.',
+                'count'    => collect($cart)->sum('quantity'),
+            ];
+        }
 
         if (!isset($cart[$key])) {
             $cart[$key] = ['name' => '', 'price' => 0, 'quantity' => 0, 'image' => ''];
@@ -142,33 +167,43 @@ class CartController extends Controller
         ];
     }
 
+    protected function findKeyById(array $cart, int|string $id): ?string
+    {
+        foreach ($cart as $key => $item) {
+            if (str_ends_with($key, '_' . $id)) {
+                return $key;
+            }
+        }
+        return null;
+    }
+
     public function increment(Request $request, int $id)
     {
-        return response()->json($this->adjust($request, 'product', $id, +1));
+        return response()->json($this->adjust($request, $id, +1));
     }
 
     public function decrement(Request $request, int $id)
     {
-        return response()->json($this->adjust($request, 'product', $id, -1));
+        return response()->json($this->adjust($request, $id, -1));
     }
 
     public function incrementFruit(Request $request, int $id)
     {
-        return response()->json($this->adjust($request, 'fruit', $id, +1));
+        return response()->json($this->adjust($request, $id, +1));
     }
 
     public function decrementFruit(Request $request, int $id)
     {
-        return response()->json($this->adjust($request, 'fruit', $id, -1));
+        return response()->json($this->adjust($request, $id, -1));
     }
 
     public function incrementJuice(Request $request, int $id)
     {
-        return response()->json($this->adjust($request, 'juice', $id, +1));
+        return response()->json($this->adjust($request, $id, +1));
     }
 
     public function decrementJuice(Request $request, int $id)
     {
-        return response()->json($this->adjust($request, 'juice', $id, -1));
+        return response()->json($this->adjust($request, $id, -1));
     }
 }

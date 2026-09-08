@@ -363,33 +363,94 @@
                 <div class="col-lg-8">
                     <div class="cart-card">
                         @foreach($cart as $id => $item)
+
                             @php
+
                                 $parts = explode('_', $id);
-                                $type = $parts[0];
-                                $itemId = $parts[1];
+
+                                $type = strtolower(
+                                    $item['model'] ?? $parts[0]
+                                );
+
+                                $itemId = end($parts);
+
                             @endphp
-                            <div class="cart-item d-flex align-items-center gap-3" id="cart-item-{{ $id }}">
-                                <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}" class="cart-item-img">
-                                
+
+                            <div
+                                class="cart-item d-flex align-items-center gap-3"
+                                id="cart-item-{{ $id }}"
+                            >
+
+                                <img
+                                    src="{{ $item['image'] }}"
+                                    alt="{{ $item['name'] }}"
+                                    class="cart-item-img"
+                                >
+
                                 <div class="flex-grow-1 min-w-0">
-                                    <h2 class="cart-item-name text-truncate">{{ $item['name'] }}</h2>
-                                    <div class="cart-item-price">${{ number_format($item['price'], 2) }} / unit</div>
+
+                                    <h2 class="cart-item-name text-truncate">
+                                        {{ $item['name'] }}
+                                    </h2>
+
+                                    <div class="cart-item-price">
+                                        ${{ number_format($item['price'], 2) }} / unit
+                                    </div>
+
                                 </div>
+
 
                                 <div class="qty-control">
-                                    <button class="qty-btn minus cart-decrement" data-type="{{ $type }}" data-id="{{ $itemId }}" data-action="decrement" aria-label="Decrease quantity">
+
+                                    <button
+                                        class="qty-btn minus cart-decrement"
+                                        data-type="{{ $type }}"
+                                        data-id="{{ $itemId }}"
+                                        data-action="decrement"
+                                    >
                                         <i class="bi bi-dash"></i>
                                     </button>
-                                    <span class="qty-value" id="qty-{{ $id }}">{{ $item['quantity'] }}</span>
-                                    <button class="qty-btn plus cart-increment" data-type="{{ $type }}" data-id="{{ $itemId }}" data-action="increment" aria-label="Increase quantity">
+
+
+                                    <span
+                                        class="qty-value"
+                                        id="qty-{{ $id }}"
+                                    >
+                                        {{ $item['quantity'] }}
+                                    </span>
+
+
+                                    <button
+                                        class="qty-btn plus cart-increment"
+                                        data-type="{{ $type }}"
+                                        data-id="{{ $itemId }}"
+                                        data-action="increment"
+                                    >
                                         <i class="bi bi-plus"></i>
                                     </button>
+
                                 </div>
 
-                                <div class="text-end ms-2 ms-sm-4" style="min-width: 80px;">
-                                    <div class="cart-item-subtotal" id="subtotal-{{ $id }}">${{ number_format($item['price'] * $item['quantity'], 2) }}</div>
+
+                                <div
+                                    class="text-end ms-2 ms-sm-4"
+                                    style="min-width: 80px;"
+                                >
+
+                                    <div
+                                        class="cart-item-subtotal"
+                                        id="subtotal-{{ $id }}"
+                                    >
+                                        ${{ number_format(
+                                            $item['price'] * $item['quantity'],
+                                            2
+                                        ) }}
+                                    </div>
+
                                 </div>
+
                             </div>
+
                         @endforeach
                     </div>
                     
@@ -608,182 +669,840 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const cartCount = document.getElementById('cart-count');
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
-            function updateCartCount() {
-                fetch('{{ route("cart.count") }}')
-                    .then(response => response.json())
-                    .then(data => {
-                        cartCount.textContent = data.count;
-                        cartCount.style.display = data.count > 0 ? 'flex' : 'none';
-                    });
-            }
+<script>
+    // =========================================================
+    // CSRF
+    // =========================================================
+    const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute('content');
 
-            function updateTotal() {
-                let total = 0;
-                document.querySelectorAll('[id^="subtotal-"]').forEach(el => {
-                    total += parseFloat(el.textContent.replace('$', ''));
-                });
-                const formattedTotal = '$' + total.toFixed(2);
-                document.getElementById('cart-total').textContent = formattedTotal;
-                
-                const subtotalEl = document.getElementById('summary-subtotal');
-                if (subtotalEl) subtotalEl.textContent = formattedTotal;
 
-                const checkoutSub = document.getElementById('checkout-subtotal-val');
-                const checkoutTot = document.getElementById('checkout-total-val');
-                if (checkoutSub) checkoutSub.textContent = formattedTotal;
-                if (checkoutTot) checkoutTot.textContent = formattedTotal;
-            }
+    // =========================================================
+    // ROUTES
+    // =========================================================
+    const routes = {
 
-            function buildCartUrl(action, type, id) {
-                const suffix = (type === 'product' || type === 'vegetable' || type === 'fresh-nut' || type === 'egg') ? '' : '-' + type;
-                return `/cart/${action}${suffix}/${id}`;
-            }
+        count: '{{ route("cart.count") }}',
 
-            document.querySelectorAll('.cart-increment, .cart-decrement').forEach(button => {
-                button.addEventListener('click', function() {
-                    const type   = this.dataset.type;
-                    const id     = this.dataset.id;
-                    const action = this.dataset.action;
-                    const url    = buildCartUrl(action, type, id);
+        clear: '{{ route("cart.clear") }}',
 
-                    fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (!data.success) return;
-                        const cartId = type + '_' + id;
-                        if (data.removed) {
-                            const row = document.getElementById('cart-item-' + cartId);
-                            if (row) row.remove();
-                            if (data.count === 0) location.reload();
-                        } else {
-                            document.getElementById('qty-' + cartId).textContent = data.quantity;
-                            const price = parseFloat(document.querySelector('#cart-item-' + cartId + ' .cart-item-price').textContent.replace('$', ''));
-                            document.getElementById('subtotal-' + cartId).textContent = '$' + (price * data.quantity).toFixed(2);
-                        }
-                        cartCount.textContent = data.count;
-                        cartCount.style.display = data.count > 0 ? 'flex' : 'none';
-                        updateTotal();
-                    })
-                    .catch(err => console.error('Cart update failed:', err));
-                });
+        // IMPORTANT:
+        // Use __ID__ as placeholder because Laravel route requires {id}
+        productInc: '{{ route("cart.increment", ["id" => "__ID__"]) }}',
+        productDec: '{{ route("cart.decrement", ["id" => "__ID__"]) }}',
+
+        fruitInc: '{{ route("cart.increment-fruit", ["id" => "__ID__"]) }}',
+        fruitDec: '{{ route("cart.decrement-fruit", ["id" => "__ID__"]) }}',
+
+        juiceInc: '{{ route("cart.increment-juice", ["id" => "__ID__"]) }}',
+        juiceDec: '{{ route("cart.decrement-juice", ["id" => "__ID__"]) }}',
+
+        checkoutStore: '{{ route("orders.store") }}',
+    };
+
+
+    // =========================================================
+    // MONEY FORMAT
+    // =========================================================
+    function formatMoney(number) {
+        return '$' + parseFloat(number || 0).toFixed(2);
+    }
+
+
+    // =========================================================
+    // MODEL / CATEGORY ROUTES
+    // =========================================================
+    const models = {
+
+        vegetable: {
+            inc: routes.productInc,
+            dec: routes.productDec
+        },
+
+        freshnut: {
+            inc: routes.productInc,
+            dec: routes.productDec
+        },
+
+        'fresh-nut': {
+            inc: routes.productInc,
+            dec: routes.productDec
+        },
+
+        egg: {
+            inc: routes.productInc,
+            dec: routes.productDec
+        },
+
+        farmanimal: {
+            inc: routes.productInc,
+            dec: routes.productDec
+        },
+
+        'farm-animal': {
+            inc: routes.productInc,
+            dec: routes.productDec
+        },
+
+        fruit: {
+            inc: routes.fruitInc,
+            dec: routes.fruitDec
+        },
+
+        juice: {
+            inc: routes.juiceInc,
+            dec: routes.juiceDec
+        },
+
+        product: {
+            inc: routes.productInc,
+            dec: routes.productDec
+        }
+    };
+
+
+    // =========================================================
+    // GET ENDPOINT
+    // =========================================================
+    function endpointFor(action, model, id) {
+
+        model = String(model || '').toLowerCase();
+
+        const entry = models[model];
+
+        if (!entry) {
+            return null;
+        }
+
+        const template =
+            action === 'increment'
+                ? entry.inc
+                : entry.dec;
+
+        if (!template) {
+            return null;
+        }
+
+        // Replace __ID__ with actual product ID
+        return template.replace(
+            '__ID__',
+            encodeURIComponent(id)
+        );
+    }
+
+
+    // =========================================================
+    // UPDATE CART COUNT
+    // =========================================================
+    function updateHeaderCount(count) {
+
+        const badge = document.getElementById('cart-count');
+
+        if (badge) {
+            badge.textContent = count;
+        }
+    }
+
+
+    // =========================================================
+    // UPDATE TOTAL
+    // =========================================================
+    function refreshTotals() {
+
+        let total = 0;
+
+        document
+            .querySelectorAll('[id^="subtotal-"]')
+            .forEach(element => {
+
+                const value = parseFloat(
+                    element.textContent
+                        .replace(/[^0-9.]/g, '')
+                ) || 0;
+
+                total += value;
             });
 
-            const clearBtn = document.getElementById('clear-cart');
-            if (clearBtn) {
-                clearBtn.addEventListener('click', function() {
-                    if (confirm('Are you sure you want to clear your cart?')) {
-                        fetch('{{ route("cart.clear") }}', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) location.reload();
-                        });
+
+        const cartTotalEl =
+            document.getElementById('cart-total');
+
+        const summarySubEl =
+            document.getElementById('summary-subtotal');
+
+        const checkoutSubEl =
+            document.getElementById('checkout-subtotal-val');
+
+        const checkoutTotEl =
+            document.getElementById('checkout-total-val');
+
+
+        [
+            cartTotalEl,
+            summarySubEl,
+            checkoutSubEl,
+            checkoutTotEl
+
+        ].forEach(element => {
+
+            if (element) {
+                element.textContent = formatMoney(total);
+            }
+
+        });
+    }
+
+
+    // =========================================================
+    // INCREMENT / DECREMENT
+    // =========================================================
+    async function adjustQty(button) {
+
+        const type =
+            String(button.dataset.type || '').toLowerCase();
+
+        const id =
+            button.dataset.id;
+
+        const action =
+            button.dataset.action;
+
+
+        // Get URL
+        const url =
+            endpointFor(action, type, id);
+
+
+        if (!url) {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Unsupported item',
+                text: 'Cannot update this item.'
+            });
+
+            return;
+        }
+
+
+        button.disabled = true;
+
+
+        try {
+
+            const response = await fetch(url, {
+
+                method: 'POST',
+
+                headers: {
+
+                    'X-CSRF-TOKEN': csrfToken,
+
+                    'Accept': 'application/json',
+
+                    'Content-Type': 'application/json'
+
+                }
+
+            });
+
+
+            const data = await response.json();
+
+
+            if (!response.ok || !data.success) {
+
+                throw new Error(
+                    data.message || 'Update failed'
+                );
+            }
+
+
+            // =================================================
+            // ITEM REMOVED
+            // =================================================
+            if (data.removed) {
+
+                const row =
+                    button.closest('.cart-item');
+
+                if (row) {
+                    row.remove();
+                }
+
+            }
+
+            // =================================================
+            // ITEM UPDATED
+            // =================================================
+            else {
+
+                const row =
+                    button.closest('.cart-item');
+
+
+                if (row) {
+
+                    // Quantity
+                    const qtyElement =
+                        row.querySelector('.qty-value');
+
+                    if (qtyElement) {
+                        qtyElement.textContent =
+                            data.quantity;
                     }
-                });
+
+
+                    // Unit price
+                    const priceElement =
+                        row.querySelector('.cart-item-price');
+
+                    const unitPrice =
+                        parseFloat(
+                            priceElement.textContent
+                                .replace(/[^0-9.]/g, '')
+                        ) || 0;
+
+
+                    // Subtotal
+                    const subtotalElement =
+                        row.querySelector('.cart-item-subtotal');
+
+                    if (subtotalElement) {
+
+                        subtotalElement.textContent =
+                            formatMoney(
+                                unitPrice * data.quantity
+                            );
+                    }
+                }
             }
 
-            // Open Checkout Modal
-            const checkoutBtn = document.getElementById('checkout-btn');
-            if (checkoutBtn) {
-                checkoutBtn.addEventListener('click', function() {
-                    const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
-                    checkoutModal.show();
-                });
+
+            // Update cart count
+            updateHeaderCount(data.count);
+
+
+            // Update total
+            refreshTotals();
+
+
+            // If cart becomes empty
+            if (data.count === 0) {
+                setTimeout(() => {
+                    location.reload();
+                }, 300);
             }
 
-            // Form Submit, SweetAlert Countdown Timer & Receipt Trigger
-            document.getElementById('proceed-to-receipt').addEventListener('click', function() {
-                const form = document.getElementById('checkout-form');
-                if (!form.checkValidity()) {
-                    form.reportValidity();
+
+        } catch (error) {
+
+            console.error(error);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Update failed',
+                text: error.message
+            });
+
+        } finally {
+
+            button.disabled = false;
+        }
+    }
+
+
+    // =========================================================
+    // BUTTON EVENTS
+    // =========================================================
+    document
+        .querySelectorAll('.cart-increment, .cart-decrement')
+        .forEach(button => {
+
+            button.addEventListener(
+                'click',
+                () => adjustQty(button)
+            );
+
+        });
+
+
+    // =========================================================
+    // CLEAR CART
+    // =========================================================
+    const clearBtn =
+        document.getElementById('clear-cart');
+
+
+    if (clearBtn) {
+
+        clearBtn.addEventListener(
+            'click',
+            async () => {
+
+                const result =
+                    await Swal.fire({
+
+                        title: 'Clear cart?',
+
+                        text: 'All items will be removed.',
+
+                        icon: 'warning',
+
+                        showCancelButton: true,
+
+                        confirmButtonText:
+                            'Yes, clear it',
+
+                        cancelButtonText:
+                            'Cancel'
+                    });
+
+
+                if (!result.isConfirmed) {
                     return;
                 }
 
-                // Hide shipping details modal
-                const checkoutModalEl = document.getElementById('checkoutModal');
-                const checkoutModal = bootstrap.Modal.getInstance(checkoutModalEl);
-                if (checkoutModal) {
-                    checkoutModal.hide();
-                }
 
-                const formData = new FormData(form);
-                const customerInfo = Object.fromEntries(formData.entries());
+                try {
 
-                const cart = @json($cart);
-                const receiptNo = 'FF-' + Date.now().toString().slice(-8);
-                const date = new Date().toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric', 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                });
+                    const response =
+                        await fetch(
+                            routes.clear,
+                            {
+                                method: 'POST',
 
-                document.getElementById('receipt-no').textContent = receiptNo;
-                document.getElementById('receipt-date').textContent = date;
-                document.getElementById('receipt-customer-name').textContent = customerInfo.customer_name;
-                document.getElementById('receipt-customer-phone').textContent = customerInfo.customer_phone;
-                document.getElementById('receipt-customer-email').textContent = customerInfo.customer_email || 'N/A';
-                document.getElementById('receipt-customer-address').textContent = customerInfo.customer_address;
-                document.getElementById('receipt-customer-city').textContent = customerInfo.customer_city;
-                document.getElementById('receipt-postal-code').textContent = customerInfo.postal_code || 'N/A';
+                                headers: {
+                                    'X-CSRF-TOKEN':
+                                        csrfToken,
 
-                let itemsHtml = '';
-                let total = 0;
-                for (const [id, item] of Object.entries(cart)) {
-                    const subtotal = item.price * item.quantity;
-                    total += subtotal;
-                    itemsHtml += `
-                        <tr>
-                            <td class="ps-0 fw-semibold text-dark">${item.name}</td>
-                            <td class="text-center">${item.quantity}</td>
-                            <td class="text-end">$${item.price.toFixed(2)}</td>
-                            <td class="text-end pe-0 fw-bold">$${subtotal.toFixed(2)}</td>
-                        </tr>
-                    `;
-                }
-                document.getElementById('receipt-items').innerHTML = itemsHtml;
-                document.getElementById('receipt-total').textContent = '$' + total.toFixed(2);
-
-                // SweetAlert Countdown
-                let timerInterval;
-                Swal.fire({
-                    title: "Processing Order...",
-                    html: "Generating receipt in <b></b> ms.",
-                    timer: 2000,
-                    timerProgressBar: true,
-                    didOpen: () => {
-                        Swal.showLoading();
-                        const timer = Swal.getPopup().querySelector("b");
-                        timerInterval = setInterval(() => {
-                            if (timer) {
-                                timer.textContent = Swal.getTimerLeft();
+                                    'Accept':
+                                        'application/json'
+                                }
                             }
-                        }, 100);
-                    },
-                    willClose: () => {
-                        clearInterval(timerInterval);
-                    }
-                }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
-                        const receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
-                        receiptModal.show();
-                    }
-                });
-            });
+                        );
 
-            updateCartCount();
-        });
-    </script>
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok || !data.success) {
+
+                        throw new Error(
+                            data.message ||
+                            'Failed to clear cart'
+                        );
+                    }
+
+
+                    updateHeaderCount(0);
+
+                    location.reload();
+
+
+                } catch (error) {
+
+                    Swal.fire({
+
+                        icon: 'error',
+
+                        title: 'Failed',
+
+                        text: error.message
+
+                    });
+
+                }
+
+            }
+        );
+    }
+
+
+    // =========================================================
+    // CHECKOUT BUTTON
+    // =========================================================
+    const checkoutBtn =
+        document.getElementById('checkout-btn');
+
+
+    if (checkoutBtn) {
+
+        checkoutBtn.addEventListener(
+            'click',
+            () => {
+
+                const modalElement =
+                    document.getElementById(
+                        'checkoutModal'
+                    );
+
+
+                if (modalElement) {
+
+                    const modal =
+                        new bootstrap.Modal(
+                            modalElement
+                        );
+
+                    modal.show();
+                }
+
+            }
+        );
+    }
+
+
+    // =========================================================
+    // PLACE ORDER
+    // =========================================================
+    const proceedButton =
+        document.getElementById(
+            'proceed-to-receipt'
+        );
+
+
+    if (proceedButton) {
+
+        proceedButton.addEventListener(
+            'click',
+            async function () {
+
+                const form =
+                    document.getElementById(
+                        'checkout-form'
+                    );
+
+
+                // Validate form
+                if (!form.checkValidity()) {
+
+                    form.reportValidity();
+
+                    return;
+                }
+
+
+                const button = this;
+
+                button.disabled = true;
+
+
+                const formData =
+                    new FormData(form);
+
+
+                try {
+
+                    // =========================================
+                    // SEND ORDER TO LARAVEL
+                    // =========================================
+                    const response =
+                        await fetch(
+                            routes.checkoutStore,
+                            {
+                                method: 'POST',
+
+                                headers: {
+
+                                    'X-CSRF-TOKEN':
+                                        csrfToken,
+
+                                    'Accept':
+                                        'application/json'
+
+                                },
+
+                                body: formData
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok || !data.success) {
+
+                        throw new Error(
+                            data.message ||
+                            'Failed to place order.'
+                        );
+                    }
+
+
+                    // =========================================
+                    // CLOSE CHECKOUT MODAL
+                    // =========================================
+                    const checkoutModalElement =
+                        document.getElementById(
+                            'checkoutModal'
+                        );
+
+
+                    const checkoutModal =
+                        bootstrap.Modal.getInstance(
+                            checkoutModalElement
+                        );
+
+
+                    if (checkoutModal) {
+                        checkoutModal.hide();
+                    }
+
+
+                    // =========================================
+                    // CUSTOMER INFORMATION
+                    // =========================================
+                    const customerInfo =
+                        Object.fromEntries(
+                            formData.entries()
+                        );
+
+
+                    // =========================================
+                    // RECEIPT NUMBER
+                    // =========================================
+                    const receiptNo =
+                        'FF-' +
+                        Date.now()
+                            .toString()
+                            .slice(-8);
+
+
+                    const date =
+                        new Date().toLocaleDateString(
+                            'en-US',
+                            {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            }
+                        );
+
+
+                    document.getElementById(
+                        'receipt-no'
+                    ).textContent =
+                        receiptNo;
+
+
+                    document.getElementById(
+                        'receipt-date'
+                    ).textContent =
+                        date;
+
+
+                    document.getElementById(
+                        'receipt-customer-name'
+                    ).textContent =
+                        customerInfo.customer_name;
+
+
+                    document.getElementById(
+                        'receipt-customer-phone'
+                    ).textContent =
+                        customerInfo.customer_phone;
+
+
+                    document.getElementById(
+                        'receipt-customer-email'
+                    ).textContent =
+                        customerInfo.customer_email ||
+                        'N/A';
+
+
+                    document.getElementById(
+                        'receipt-customer-address'
+                    ).textContent =
+                        customerInfo.customer_address;
+
+
+                    document.getElementById(
+                        'receipt-customer-city'
+                    ).textContent =
+                        customerInfo.customer_city;
+
+
+                    document.getElementById(
+                        'receipt-postal-code'
+                    ).textContent =
+                        customerInfo.postal_code ||
+                        'N/A';
+
+
+                    // =========================================
+                    // RECEIPT ITEMS
+                    // =========================================
+                    let itemsHtml = '';
+
+                    let total = 0;
+
+
+                    data.orders.forEach(order => {
+
+                        const quantity =
+                            parseInt(
+                                order.quantity
+                            ) || 0;
+
+
+                        const subtotal =
+                            parseFloat(
+                                order.total_price
+                            ) || 0;
+
+
+                        const price =
+                            quantity > 0
+                                ? subtotal / quantity
+                                : 0;
+
+
+                        total += subtotal;
+
+
+                        itemsHtml += `
+                            <tr>
+                                <td class="ps-0 fw-semibold text-dark">
+                                    ${order.item_name}
+                                </td>
+
+                                <td class="text-center">
+                                    ${quantity}
+                                </td>
+
+                                <td class="text-end">
+                                    $${price.toFixed(2)}
+                                </td>
+
+                                <td class="text-end pe-0 fw-bold">
+                                    $${subtotal.toFixed(2)}
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+
+                    document.getElementById(
+                        'receipt-items'
+                    ).innerHTML =
+                        itemsHtml;
+
+
+                    document.getElementById(
+                        'receipt-total'
+                    ).textContent =
+                        '$' + total.toFixed(2);
+
+
+                    // =========================================
+                    // SUCCESS ALERT
+                    // =========================================
+                    let timerInterval;
+
+
+                    Swal.fire({
+
+                        title:
+                            'Order Successful!',
+
+                        html:
+                            'Generating receipt in <b></b> ms.',
+
+                        timer: 2000,
+
+                        timerProgressBar: true,
+
+                        didOpen: () => {
+
+                            Swal.showLoading();
+
+
+                            const timer =
+                                Swal.getPopup()
+                                    .querySelector('b');
+
+
+                            timerInterval =
+                                setInterval(() => {
+
+                                    if (timer) {
+
+                                        timer.textContent =
+                                            Swal.getTimerLeft();
+
+                                    }
+
+                                }, 100);
+                        },
+
+
+                        willClose: () => {
+
+                            clearInterval(
+                                timerInterval
+                            );
+
+                        }
+
+                    }).then(result => {
+
+                        if (
+                            result.dismiss ===
+                            Swal.DismissReason.timer
+                        ) {
+
+                            const receiptModal =
+                                new bootstrap.Modal(
+                                    document.getElementById(
+                                        'receiptModal'
+                                    )
+                                );
+
+
+                            receiptModal.show();
+                        }
+
+                    });
+
+
+                    // Update cart badge
+                    updateHeaderCount(0);
+
+
+                } catch (error) {
+
+                    console.error(
+                        'Order Error:',
+                        error
+                    );
+
+
+                    Swal.fire({
+
+                        icon: 'error',
+
+                        title: 'Order Failed',
+
+                        text: error.message
+
+                    });
+
+
+                } finally {
+
+                    button.disabled = false;
+                }
+
+            }
+        );
+    }
+</script>
 </body>
 </html>
