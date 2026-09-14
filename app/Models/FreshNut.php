@@ -16,6 +16,7 @@ class FreshNut extends Model
         'price',
         'qty',
         'image',
+        'image_public_id',
         'description',
     ];
 }

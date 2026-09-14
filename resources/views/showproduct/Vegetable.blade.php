@@ -17,7 +17,7 @@
         
         <!-- Header & Back Navigation -->
         <div class="mb-8">
-            <a href="{{ route('homepage') }}" class="inline-flex items-center text-sm font-medium text-emerald-700 hover:text-emerald-800 transition-colors mb-4">
+            <a href="{{ route('homeforclient') }}" class="inline-flex items-center text-sm font-medium text-emerald-700 hover:text-emerald-800 transition-colors mb-4">
                 <i class="bi bi-arrow-left me-2"></i> Back to homepage
             </a>
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-emerald-100 pb-6">

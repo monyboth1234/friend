@@ -1,904 +1,2437 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Swasth Ande - Premium Organic Products</title>
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+
+    <title>Farm Fresh | From Nature to Your Table</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Bootstrap Icons -->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <!-- Font Awesome -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Font -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600;1,700&display=swap"
+          rel="stylesheet">
+
     <style>
+
+        /* =========================================================
+           ROOT
+        ========================================================= */
+
         :root {
-            --brand-green: #1c3e27;
-            --brand-green-dark: #142f1d;
-            --brand-green-light: #2d5a3c;
+            --green-950: #071c12;
+            --green-900: #0b2819;
+            --green-800: #123d25;
+            --green: #194c2d;
+            --green-600: #28663d;
+            --green-500: #3f8155;
 
-            --brand-orange: #e06d26;
-            --brand-orange-dark: #c85a18;
-            --brand-orange-light: #fdf0e6;
+            --orange: #e47732;
+            --orange-dark: #c85b1c;
+            --orange-light: #fff1e7;
 
-            --cream-bg: #f8f6f0;
+            --cream: #f8f6ef;
+            --cream-2: #f2eee3;
+
+            --white: #ffffff;
+
+            --text: #26342b;
+            --muted: #778079;
+            --muted-light: #a1a8a3;
+
+            --border: rgba(20, 60, 38, .10);
+
+            --shadow-sm: 0 10px 30px rgba(9, 45, 27, .07);
+            --shadow-md: 0 20px 50px rgba(9, 45, 27, .10);
+            --shadow-lg: 0 35px 90px rgba(9, 45, 27, .16);
+
+            --radius-sm: 14px;
+            --radius-md: 22px;
+            --radius-lg: 32px;
+            --radius-xl: 42px;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         html {
             scroll-behavior: smooth;
+            scroll-padding-top: 90px;
         }
 
         body {
-            background-color: var(--cream-bg);
-            color: #333;
-            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            margin: 0;
+            background: var(--cream);
+            color: var(--text);
+            font-family: "DM Sans", sans-serif;
+            overflow-x: hidden;
         }
 
-        .text-brand-green {
-            color: var(--brand-green) !important;
-        }
-
-        .text-brand-orange {
-            color: var(--brand-orange) !important;
-        }
-
-        .bg-brand-green {
-            background-color: var(--brand-green) !important;
-        }
-
-        .bg-brand-green-dark {
-            background-color: var(--brand-green-dark) !important;
-        }
-
-        .bg-brand-orange {
-            background-color: var(--brand-orange) !important;
-        }
-
-        .bg-brand-orange-light {
-            background-color: var(--brand-orange-light) !important;
-        }
-
-        .bg-cream {
-            background-color: var(--cream-bg) !important;
-        }
-
-        .btn-brand-green {
-            background-color: var(--brand-green);
-            color: white;
-            border: none;
-        }
-
-        .btn-brand-green:hover {
-            background-color: var(--brand-green-dark);
+        ::selection {
+            background: var(--orange);
             color: white;
         }
 
-        .btn-brand-orange {
-            background-color: var(--brand-orange);
-            color: white;
-            border: none;
+        a {
+            text-decoration: none;
         }
 
-        .btn-brand-orange:hover {
-            background-color: var(--brand-orange-dark);
-            color: white;
+        img {
+            max-width: 100%;
         }
 
-        .btn-outline-brand-orange {
-            color: var(--brand-orange);
-            border: 1px solid var(--brand-orange);
-            background-color: white;
+        .container {
+            max-width: 1240px;
         }
-
-        .btn-outline-brand-orange:hover {
-            background-color: var(--brand-orange);
-            color: white;
-        }
-
-        .custom-shadow {
-            box-shadow: 0 10px 30px -5px rgba(28, 62, 39, 0.08);
-        }
-
-        .hero-bg {
-            background: linear-gradient(
-                135deg,
-                #f8f6f0 0%,
-                #f5efe4 100%
-            );
-        }
-
-        .modal-open {
-            overflow: hidden;
-        }
-
 
         /* =========================================================
-           HEADER
-        ========================================================== */
+           PAGE LOADER
+        ========================================================= */
+
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: var(--green-950);
+
+            transition: opacity .5s ease, visibility .5s ease;
+        }
+
+        .page-loader.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+            color: white;
+        }
+
+        .loader-leaf {
+            width: 65px;
+            height: 65px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin: auto auto 18px;
+
+            border-radius: 22px;
+
+            background: var(--orange);
+
+            font-size: 26px;
+
+            animation: loaderPulse 1.3s infinite;
+        }
+
+        .loader-content strong {
+            display: block;
+            font-family: "Playfair Display", serif;
+            font-size: 28px;
+        }
+
+        .loader-content span {
+            display: block;
+            margin-top: 4px;
+            color: rgba(255,255,255,.5);
+            font-size: 10px;
+            letter-spacing: 3px;
+        }
+
+        @keyframes loaderPulse {
+            0%,100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        /* =========================================================
+           SCROLL PROGRESS
+        ========================================================= */
+
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            width: 0;
+            height: 3px;
+
+            z-index: 9999;
+
+            background: var(--orange);
+        }
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        .section-padding {
+            padding: 115px 0;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            color: var(--orange);
+
+            font-size: 11px;
+            font-weight: 800;
+
+            letter-spacing: 2.8px;
+            text-transform: uppercase;
+        }
+
+        .section-label::before {
+            content: "";
+
+            width: 30px;
+            height: 2px;
+
+            background: currentColor;
+        }
+
+        .section-title {
+            margin: 0;
+
+            color: var(--green-800);
+
+            font-family: "Playfair Display", serif;
+
+            font-size: clamp(38px, 5vw, 58px);
+            line-height: 1.08;
+
+            font-weight: 700;
+
+            letter-spacing: -1.5px;
+        }
+
+        .section-description {
+            max-width: 650px;
+
+            color: var(--muted);
+
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .btn-main,
+        .btn-orange,
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 11px;
+
+            min-height: 52px;
+            padding: 0 25px;
+
+            border-radius: 100px;
+
+            font-size: 13px;
+            font-weight: 800;
+
+            transition: .35s ease;
+        }
+
+        .btn-main {
+            color: white;
+            background: var(--green);
+            border: 1px solid var(--green);
+        }
+
+        .btn-main:hover {
+            color: white;
+            background: var(--green-900);
+            transform: translateY(-4px);
+            box-shadow: 0 18px 35px rgba(25,76,45,.22);
+        }
+
+        .btn-orange {
+            color: white;
+            background: var(--orange);
+            border: 1px solid var(--orange);
+        }
+
+        .btn-orange:hover {
+            color: white;
+            background: var(--orange-dark);
+            transform: translateY(-4px);
+            box-shadow: 0 18px 35px rgba(228,119,50,.25);
+        }
+
+        .btn-outline {
+            color: var(--green);
+            background: transparent;
+            border: 1px solid rgba(25,76,45,.35);
+        }
+
+        .btn-outline:hover {
+            color: white;
+            background: var(--green);
+            border-color: var(--green);
+            transform: translateY(-4px);
+        }
+
+        /* =========================================================
+           TOP BAR
+        ========================================================= */
+
+        .top-bar {
+            background: var(--green-950);
+            color: rgba(255,255,255,.65);
+
+            padding: 9px 0;
+
+            font-size: 11px;
+        }
+
+        .top-bar-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .top-bar i {
+            color: #ffae78;
+            margin-right: 6px;
+        }
+
+        .top-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .top-links a {
+            color: rgba(255,255,255,.6);
+            transition: .25s;
+        }
+
+        .top-links a:hover {
+            color: white;
+        }
+
+        /* =========================================================
+           NAVBAR
+        ========================================================= */
 
         .main-header {
             position: sticky;
             top: 0;
             z-index: 1050;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #eee;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+            background: rgba(255,255,255,.92);
+
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+
+            border-bottom: 1px solid rgba(0,0,0,.05);
         }
 
-        .navbar-brand img {
-            width: 70px;
-            height: 50px;
-            object-fit: contain;
+        .navbar {
+            min-height: 82px;
         }
 
-        .brand-title {
-            color: var(--brand-green);
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            width: 49px;
+            height: 49px;
+
+            object-fit: cover;
+
+            border-radius: 15px;
+
+            box-shadow: 0 7px 20px rgba(23,63,42,.12);
+        }
+
+        .brand-name {
+            color: var(--green-800);
+
             font-size: 20px;
             font-weight: 800;
+
             line-height: 1;
         }
 
         .brand-subtitle {
-            font-size: 9px;
-            letter-spacing: 2px;
+            margin-top: 5px;
+
+            color: #929993;
+
+            font-size: 7px;
+            font-weight: 800;
+
+            letter-spacing: 2.5px;
+        }
+
+        .navbar-nav {
+            gap: 3px;
+        }
+
+        .nav-link {
+            position: relative;
+
+            padding: 10px 15px !important;
+
+            border-radius: 100px;
+
+            color: #47524b !important;
+
+            font-size: 12px;
             font-weight: 700;
-            color: #777;
+
+            transition: .3s;
         }
 
-        .navbar-nav .nav-link {
-            color: #444;
-            font-size: 14px;
-            font-weight: 600;
-            transition: 0.3s;
+        .nav-link::after {
+            content: "";
+
+            position: absolute;
+
+            left: 50%;
+            bottom: 4px;
+
+            width: 0;
+            height: 2px;
+
+            background: var(--orange);
+
+            transform: translateX(-50%);
+
+            transition: .3s;
         }
 
-        .navbar-nav .nav-link:hover,
-        .navbar-nav .nav-link.active {
-            color: var(--brand-orange);
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--orange) !important;
+            background: var(--orange-light);
         }
 
-        .cart-icon {
-            font-size: 20px;
-            color: var(--brand-green);
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 16px;
         }
 
-        .cart-icon:hover {
-            color: var(--brand-orange);
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 13px;
         }
 
+        .nav-login {
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .nav-register {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            min-height: 42px;
+            padding: 0 19px;
+
+            border-radius: 100px;
+
+            color: white;
+            background: var(--green);
+
+            font-size: 12px;
+            font-weight: 800;
+
+            transition: .3s;
+        }
+
+        .nav-register:hover {
+            color: white;
+            background: var(--orange);
+            transform: translateY(-2px);
+        }
+
+        .navbar-toggler {
+            border: none;
+            box-shadow: none !important;
+        }
 
         /* =========================================================
            HERO
-        ========================================================== */
+        ========================================================= */
 
-        .hero-section {
-            padding: 50px 0 70px;
-            background: linear-gradient(
-                135deg,
-                #f8f6f0 0%,
-                #f5efe4 100%
-            );
-            border-bottom: 1px solid #ddd;
+        .hero {
+            position: relative;
+            overflow: hidden;
+
+            padding: 100px 0 120px;
+
+            background:
+                radial-gradient(
+                    circle at 85% 20%,
+                    rgba(228,119,50,.13),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 5% 90%,
+                    rgba(25,76,45,.10),
+                    transparent 30%
+                ),
+                var(--cream);
+        }
+
+        .hero::before {
+            content: "";
+
+            position: absolute;
+
+            width: 650px;
+            height: 650px;
+
+            right: -350px;
+            top: -300px;
+
+            border: 1px solid rgba(25,76,45,.07);
+
+            border-radius: 50%;
+        }
+
+        .hero::after {
+            content: "";
+
+            position: absolute;
+
+            width: 350px;
+            height: 350px;
+
+            left: -220px;
+            bottom: -230px;
+
+            border: 1px solid rgba(228,119,50,.10);
+
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 9px 14px;
+
+            border: 1px solid rgba(25,76,45,.08);
+
+            border-radius: 100px;
+
+            background: rgba(255,255,255,.85);
+
+            color: var(--green);
+
+            box-shadow: var(--shadow-sm);
+
+            font-size: 10px;
+            font-weight: 800;
+
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        .hero-label i {
+            color: var(--orange);
         }
 
         .hero-title {
-            color: var(--brand-green);
-            font-size: clamp(40px, 5vw, 65px);
-            font-weight: 800;
-            line-height: 1.15;
+            margin: 24px 0 0;
+
+            color: var(--green-800);
+
+            font-family: "Playfair Display", serif;
+
+            font-size: clamp(52px, 7vw, 88px);
+            line-height: .99;
+
+            font-weight: 700;
+
+            letter-spacing: -3px;
         }
 
         .hero-title span {
-            color: var(--brand-orange);
+            color: var(--orange);
+            font-style: italic;
         }
 
-        .hero-description {
-            color: #666;
-            font-size: 17px;
-            line-height: 1.7;
-            max-width: 600px;
+        .hero-text {
+            max-width: 570px;
+
+            margin-top: 27px;
+
+            color: var(--muted);
+
+            font-size: 15px;
+            line-height: 1.9;
         }
 
-        .feature-small {
-            background: rgba(255,255,255,0.8);
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 10px;
-            height: 100%;
+        .hero-buttons {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            flex-wrap: wrap;
+            gap: 11px;
+
+            margin-top: 31px;
         }
 
-        .feature-icon {
-            width: 30px;
-            height: 30px;
-            min-width: 30px;
-            border-radius: 50%;
-            background: var(--brand-orange-light);
-            color: var(--brand-orange);
+        .hero-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+
+            margin-top: 48px;
+        }
+
+        .hero-stat {
+            position: relative;
+        }
+
+        .hero-stat:not(:last-child)::after {
+            content: "";
+
+            position: absolute;
+
+            width: 1px;
+            height: 35px;
+
+            right: -21px;
+            top: 5px;
+
+            background: rgba(25,76,45,.13);
+        }
+
+        .hero-stat strong {
+            display: block;
+
+            color: var(--green-800);
+
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .hero-stat span {
+            display: block;
+
+            margin-top: 3px;
+
+            color: var(--muted-light);
+
+            font-size: 10px;
+            font-weight: 700;
+
+            text-transform: uppercase;
+            letter-spacing: .8px;
+        }
+
+        /* HERO VISUAL */
+
+        .hero-visual {
+            position: relative;
+            z-index: 2;
+
+            padding: 15px;
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+
+            padding: 8px;
+
+            border-radius: 38px;
+
+            background: white;
+
+            box-shadow: var(--shadow-lg);
+
+            transform: rotate(1.2deg);
+        }
+
+        .hero-image-wrapper::before {
+            content: "";
+
+            position: absolute;
+
+            inset: -12px;
+
+            z-index: -1;
+
+            border: 1px solid rgba(25,76,45,.08);
+
+            border-radius: 48px;
+
+            transform: rotate(-2deg);
+        }
+
+        .hero-image {
+            display: block;
+
+            width: 100%;
+            height: 560px;
+
+            object-fit: cover;
+
+            border-radius: 31px;
+        }
+
+        .hero-image-overlay {
+            position: absolute;
+            inset: 8px;
+
+            border-radius: 31px;
+
+            background:
+                linear-gradient(
+                    to top,
+                    rgba(5,30,18,.45),
+                    transparent 45%
+                );
+        }
+
+        .hero-image-caption {
+            position: absolute;
+
+            left: 32px;
+            bottom: 28px;
+
+            color: white;
+        }
+
+        .hero-image-caption small {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: rgba(255,255,255,.7);
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero-image-caption strong {
+            font-family: "Playfair Display", serif;
+            font-size: 24px;
+        }
+
+        .hero-badge {
+            position: absolute;
+
+            left: -20px;
+            bottom: 28px;
+
+            width: 155px;
+
+            padding: 18px;
+
+            border-radius: 22px;
+
+            background: white;
+
+            box-shadow: var(--shadow-lg);
+
+            transform: rotate(-4deg);
+
+            z-index: 4;
+        }
+
+        .hero-badge-icon {
+            width: 43px;
+            height: 43px;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
+            margin-bottom: 10px;
+
+            border-radius: 14px;
+
+            background: var(--orange-light);
+            color: var(--orange);
         }
 
-        .feature-small span {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--brand-green);
+        .hero-badge strong {
+            display: block;
+
+            color: var(--green);
+
+            font-size: 14px;
         }
 
-        .hero-image-container {
+        .hero-badge small {
+            color: var(--muted);
+
+            font-size: 9px;
+        }
+
+        .hero-floating {
+            position: absolute;
+
+            top: 28px;
+            right: -18px;
+
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 12px 17px;
+
+            border-radius: 100px;
+
+            color: white;
+            background: var(--green);
+
+            box-shadow: var(--shadow-lg);
+
+            z-index: 5;
+
+            animation: floating 4s ease-in-out infinite;
+        }
+
+        .hero-floating i {
+            color: #ffd48e;
+        }
+
+        .hero-floating span {
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        @keyframes floating {
+            0%,100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* =========================================================
+           TRUST
+        ========================================================= */
+
+        .trust-strip {
             position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin: auto;
-            border: 4px solid white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            z-index: 5;
+
+            padding: 23px 0;
+
+            background: var(--green-800);
         }
 
-        .hero-main-image {
-            width: 100%;
-            height: 390px;
-            object-fit: cover;
-            opacity: 0.88;
+        .trust-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+
+            color: white;
+
+            font-size: 11px;
+            font-weight: 800;
         }
 
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                to top,
-                rgba(0,0,0,0.4),
-                transparent
-            );
+        .trust-item i {
+            color: #ffb57f;
+            font-size: 17px;
         }
-
-        .egg-card {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            width: 45%;
-            max-width: 230px;
-            padding: 8px;
-            background: rgba(255,255,255,0.35);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.6);
-            border-radius: 15px;
-            transform: rotate(-2deg);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .egg-card img {
-            width: 100%;
-            height: 140px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .product-card {
-            position: absolute;
-            bottom: 25px;
-            right: 20px;
-            width: 42%;
-            max-width: 220px;
-            background: #fff3d6;
-            border: 2px solid #edcf91;
-            border-radius: 12px;
-            padding: 14px;
-            transform: rotate(2deg);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .product-card-inner {
-            border: 1px dashed #d8b86c;
-            padding: 10px;
-            border-radius: 8px;
-        }
-
 
         /* =========================================================
            PRODUCTS
-        ========================================================== */
+        ========================================================= */
 
-        .section-title-small {
-            font-size: 12px;
-            font-weight: 800;
-            letter-spacing: 3px;
-            color: var(--brand-green);
-        }
-
-        .section-title {
-            color: var(--brand-green);
-            font-size: 32px;
-            font-weight: 800;
-        }
-
-        .orange-line {
-            width: 40px;
-            height: 3px;
-            background: var(--brand-orange);
-            border-radius: 5px;
-            margin: 12px auto 0;
-        }
-
-        .product-category {
-            display: block;
-            text-decoration: none;
+        .products-section {
             background: white;
-            border-radius: 20px;
-            padding: 16px;
-            text-align: center;
-            border: 1px solid #eee;
-            transition: 0.3s;
+        }
+
+        .product-card {
+            position: relative;
+
+            display: block;
+
             height: 100%;
-        }
 
-        .product-category:hover {
-            transform: translateY(-5px);
-            border-color: var(--brand-orange);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
+            padding: 10px;
 
-        .product-image-circle {
-            width: 100%;
-            aspect-ratio: 1 / 1;
+            border: 1px solid var(--border);
+
+            border-radius: 27px;
+
+            background: white;
+
             overflow: hidden;
-            border-radius: 50%;
+
+            transition: .4s ease;
         }
 
-        .product-image-circle img {
+        .product-card:hover {
+            transform: translateY(-10px);
+
+            border-color: rgba(228,119,50,.35);
+
+            box-shadow: var(--shadow-lg);
+        }
+
+        .product-image {
+            position: relative;
+
+            overflow: hidden;
+
+            aspect-ratio: 1 / 1;
+
+            border-radius: 20px;
+
+            background: var(--cream);
+        }
+
+        .product-image::after {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background: linear-gradient(
+                to top,
+                rgba(7,28,18,.25),
+                transparent 50%
+            );
+
+            pointer-events: none;
+        }
+
+        .product-image img {
             width: 100%;
             height: 100%;
+
             object-fit: cover;
-            transition: 0.3s;
+
+            transition: .6s cubic-bezier(.2,.7,.2,1);
         }
 
-        .product-category:hover img {
+        .product-card:hover .product-image img {
             transform: scale(1.1);
         }
 
-        .product-category h3 {
-            margin-top: 16px;
-            color: var(--brand-green);
-            font-size: 16px;
-            font-weight: 700;
+        .product-icon {
+            position: absolute;
+
+            right: 12px;
+            bottom: 12px;
+
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: white;
+            color: var(--green);
+
+            box-shadow: 0 7px 20px rgba(0,0,0,.13);
+
+            z-index: 2;
+
+            transition: .3s;
         }
 
-        .product-category:hover h3 {
-            color: var(--brand-orange);
+        .product-card:hover .product-icon {
+            color: white;
+            background: var(--orange);
+            transform: rotate(-45deg);
         }
 
+        .product-content {
+            padding: 17px 8px 9px;
+        }
+
+        .product-content h3 {
+            margin: 0;
+
+            color: var(--green-800);
+
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .product-content p {
+            margin: 5px 0 0;
+
+            color: var(--muted);
+
+            font-size: 10px;
+        }
+
+        /* =========================================================
+           MARQUEE
+        ========================================================= */
+
+        .marquee {
+            overflow: hidden;
+
+            padding: 15px 0;
+
+            background: var(--cream-2);
+
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .marquee-track {
+            display: flex;
+            width: max-content;
+
+            animation: marquee 30s linear infinite;
+        }
+
+        .marquee-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+
+            margin-right: 55px;
+
+            color: var(--green-600);
+
+            font-family: "Playfair Display", serif;
+
+            font-size: 17px;
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        .marquee-item i {
+            color: var(--orange);
+            font-size: 12px;
+        }
+
+        @keyframes marquee {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
 
         /* =========================================================
            WHY US
-        ========================================================== */
+        ========================================================= */
 
         .why-section {
-            background: white;
-            border-top: 1px solid #ddd;
-            border-bottom: 1px solid #ddd;
+            background: var(--cream);
         }
 
         .why-card {
-            padding: 25px;
-            border-radius: 18px;
-            background: var(--cream-bg);
-            border: 1px solid #eee;
-            text-align: center;
             height: 100%;
+
+            padding: 27px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 23px;
+
+            background: rgba(255,255,255,.8);
+
+            transition: .35s;
+        }
+
+        .why-card:hover {
+            transform: translateY(-7px);
+
+            background: white;
+
+            box-shadow: var(--shadow-md);
         }
 
         .why-icon {
-            width: 50px;
-            height: 50px;
-            margin: 0 auto 12px;
-            border-radius: 50%;
-            background: white;
-            color: var(--brand-green);
+            width: 51px;
+            height: 51px;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 21px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+
+            margin-bottom: 18px;
+
+            border-radius: 16px;
+
+            background: var(--orange-light);
+            color: var(--orange);
+
+            font-size: 19px;
+
+            transition: .3s;
+        }
+
+        .why-card:hover .why-icon {
+            color: white;
+            background: var(--orange);
+            transform: rotate(-5deg) scale(1.05);
         }
 
         .why-card h3 {
-            color: var(--brand-green);
-            font-size: 16px;
-            font-weight: 700;
+            margin-bottom: 8px;
+
+            color: var(--green-800);
+
+            font-size: 15px;
+            font-weight: 800;
         }
 
         .why-card p {
-            color: #777;
-            font-size: 12px;
-            margin-bottom: 0;
+            margin: 0;
+
+            color: var(--muted);
+
+            font-size: 11px;
+            line-height: 1.75;
         }
 
-        .farmer-container {
+        .farmer-box {
             position: relative;
-            width: 320px;
-            height: 320px;
+
+            max-width: 480px;
+
             margin: auto;
         }
 
-        .farmer-border {
+        .farmer-box::before {
+            content: "";
+
             position: absolute;
-            inset: 0;
-            border: 2px dashed #9ed3b2;
-            border-radius: 50%;
-            transform: scale(1.05);
+
+            inset: -15px;
+
+            z-index: 0;
+
+            border: 1px solid rgba(25,76,45,.1);
+
+            border-radius: 48px;
+
+            transform: rotate(4deg);
         }
 
         .farmer-image {
+            position: relative;
+            z-index: 1;
+
             width: 100%;
-            height: 100%;
-            border-radius: 50%;
+            height: 540px;
+
             object-fit: cover;
-            border: 4px solid white;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+
+            border-radius: 38px;
+
+            box-shadow: var(--shadow-lg);
         }
 
-        .quality-badge {
+        .farmer-label {
             position: absolute;
-            top: -10px;
-            left: -10px;
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            background: var(--brand-green);
-            color: white;
-            border: 2px solid white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+            left: -25px;
+            bottom: 30px;
+
+            z-index: 3;
+
+            padding: 17px 22px;
+
+            border-radius: 20px;
+
+            background: white;
+
+            box-shadow: var(--shadow-lg);
         }
 
-        .quality-badge strong {
-            font-size: 20px;
+        .farmer-label strong {
+            display: block;
+
+            color: var(--green);
+
+            font-family: "Playfair Display", serif;
+
+            font-size: 27px;
         }
 
-        .quality-badge span {
+        .farmer-label span {
+            color: var(--muted);
+
             font-size: 10px;
-            font-weight: 600;
         }
-
 
         /* =========================================================
-           INDUSTRIES
-        ========================================================== */
+           WHO WE SERVE
+        ========================================================= */
+
+        .industry-section {
+            background: white;
+        }
 
         .industry-card {
-            background: white;
-            padding: 25px 15px;
-            border-radius: 18px;
-            border: 1px solid #ddd;
-            text-align: center;
+            position: relative;
+
             height: 100%;
-            transition: 0.3s;
+
+            padding: 33px 20px;
+
+            text-align: center;
+
+            border: 1px solid var(--border);
+
+            border-radius: 23px;
+
+            background: white;
+
+            overflow: hidden;
+
+            transition: .4s;
+        }
+
+        .industry-card::before {
+            content: "";
+
+            position: absolute;
+
+            width: 130px;
+            height: 130px;
+
+            right: -70px;
+            top: -70px;
+
+            border-radius: 50%;
+
+            background: rgba(228,119,50,.08);
+
+            transition: .4s;
         }
 
         .industry-card:hover {
-            border-color: var(--brand-orange);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-            transform: translateY(-3px);
+            color: white;
+
+            background: var(--green-800);
+
+            border-color: var(--green-800);
+
+            transform: translateY(-8px);
+
+            box-shadow: var(--shadow-lg);
+        }
+
+        .industry-card:hover::before {
+            transform: scale(2.5);
+            background: rgba(255,255,255,.06);
         }
 
         .industry-card i {
-            color: var(--brand-orange);
-            font-size: 32px;
-            margin-bottom: 12px;
+            position: relative;
+
+            color: var(--orange);
+
+            font-size: 27px;
+
+            margin-bottom: 17px;
+
+            transition: .3s;
         }
 
         .industry-card h3 {
-            color: var(--brand-green);
-            font-size: 14px;
-            font-weight: 700;
+            position: relative;
+
+            margin: 0;
+
+            color: var(--green-800);
+
+            font-size: 12px;
+            font-weight: 800;
+
+            line-height: 1.6;
+
+            transition: .3s;
         }
 
+        .industry-card:hover h3 {
+            color: white;
+        }
+
+        .industry-card:hover i {
+            color: #ffb57f;
+
+            transform: translateY(-3px);
+        }
 
         /* =========================================================
            DELIVERY
-        ========================================================== */
+        ========================================================= */
 
         .delivery-section {
-            background: white;
-            border-top: 1px solid #ddd;
+            background: var(--cream);
         }
 
-        .map-box {
-            background: var(--cream-bg);
-            padding: 20px;
+        .delivery-image-wrap {
+            position: relative;
+        }
+
+        .delivery-image-wrap::after {
+            content: "";
+
+            position: absolute;
+
+            left: -15px;
+            bottom: -15px;
+
+            width: 160px;
+            height: 160px;
+
+            border: 1px solid rgba(228,119,50,.15);
+
+            border-radius: 30px;
+
+            z-index: 0;
+        }
+
+        .delivery-image {
+            position: relative;
+            z-index: 1;
+
+            width: 100%;
+            height: 500px;
+
+            object-fit: cover;
+
+            border-radius: 35px;
+
+            box-shadow: var(--shadow-lg);
+        }
+
+        .delivery-floating {
+            position: absolute;
+
+            right: -20px;
+            top: 30px;
+
+            z-index: 3;
+
+            padding: 15px 18px;
+
             border-radius: 18px;
-            border: 1px solid #ddd;
-            min-height: 250px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+
+            background: white;
+
+            box-shadow: var(--shadow-lg);
+        }
+
+        .delivery-floating strong {
+            display: block;
+
+            color: var(--green);
+
+            font-size: 15px;
+        }
+
+        .delivery-floating span {
+            color: var(--muted);
+
+            font-size: 9px;
+        }
+
+        .delivery-steps {
+            margin-top: 30px;
         }
 
         .delivery-step {
             display: flex;
             align-items: center;
-            gap: 14px;
-            background: var(--cream-bg);
+            gap: 15px;
+
             padding: 14px;
-            border-radius: 12px;
-            border: 1px solid #eee;
-            margin-bottom: 12px;
+
+            margin-bottom: 11px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 18px;
+
+            background: white;
+
+            transition: .3s;
         }
 
-        .delivery-icon {
-            width: 38px;
-            height: 38px;
-            min-width: 38px;
-            border-radius: 50%;
-            background: white;
-            border: 1px solid #ddd;
-            color: var(--brand-green);
+        .delivery-step:hover {
+            transform: translateX(7px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .delivery-number {
+            width: 43px;
+            height: 43px;
+
+            min-width: 43px;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
+            border-radius: 14px;
+
+            color: white;
+            background: var(--green);
+
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .delivery-step strong {
+            display: block;
+
+            color: var(--green-800);
+
+            font-size: 12px;
         }
 
         .delivery-step span {
-            color: var(--brand-green);
-            font-size: 13px;
-            font-weight: 700;
-        }
+            display: block;
 
+            margin-top: 2px;
+
+            color: var(--muted);
+
+            font-size: 10px;
+        }
 
         /* =========================================================
-           CTA
-        ========================================================== */
+           TESTIMONIAL
+        ========================================================= */
 
-        .cta-section {
-            background: var(--brand-orange);
-            color: white;
-            padding: 32px 0;
+        .testimonial-section {
+            background: white;
         }
 
-        .cta-image {
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgba(255,255,255,0.6);
+        .testimonial-card {
+            position: relative;
+
+            height: 100%;
+
+            padding: 29px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 24px;
+
+            background: white;
+
+            overflow: hidden;
+
+            transition: .35s;
         }
 
+        .testimonial-card::before {
+            content: "“";
 
-        /* =========================================================
-           FOOTER
-        ========================================================== */
+            position: absolute;
 
-        footer {
-            background: var(--brand-green);
-            color: white;
-            padding: 55px 0 30px;
+            right: 20px;
+            top: 3px;
+
+            color: rgba(228,119,50,.08);
+
+            font-family: Georgia, serif;
+
+            font-size: 90px;
+            line-height: 1;
         }
 
-        .footer-title {
-            color: #ffd2b7;
+        .testimonial-card:hover {
+            transform: translateY(-7px);
+
+            box-shadow: var(--shadow-md);
+        }
+
+        .testimonial-stars {
+            position: relative;
+
+            color: #efa62e;
+
             font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+
+            letter-spacing: 2px;
+
             margin-bottom: 18px;
         }
 
-        .footer-links {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+        .testimonial-text {
+            position: relative;
 
-        .footer-links li {
-            margin-bottom: 10px;
-        }
+            min-height: 75px;
 
-        .footer-links a {
-            color: #ccc;
-            text-decoration: none;
+            color: #505a53;
+
             font-size: 12px;
+            line-height: 1.9;
         }
 
-        .footer-links a:hover {
-            color: var(--brand-orange);
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            margin-top: 21px;
         }
 
-        .social-link {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #ddd;
-            display: inline-flex;
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+
+            display: flex;
             align-items: center;
             justify-content: center;
-            text-decoration: none;
-            margin-right: 5px;
-            transition: 0.3s;
-        }
 
-        .social-link:hover {
-            background: var(--brand-orange);
-            border-color: var(--brand-orange);
+            border-radius: 50%;
+
             color: white;
+            background: var(--green);
+
+            font-size: 13px;
+            font-weight: 800;
         }
 
-        .contact-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+        .testimonial-author strong {
+            display: block;
 
-        .contact-list li {
-            color: #ccc;
-            font-size: 12px;
-            margin-bottom: 14px;
-        }
+            color: var(--green-800);
 
-        .contact-list i {
-            color: var(--brand-orange);
-            margin-right: 8px;
-        }
-
-        .copyright {
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 22px;
-            margin-top: 10px;
-            text-align: center;
-            color: #aaa;
             font-size: 11px;
         }
 
+        .testimonial-author span {
+            display: block;
+
+            margin-top: 2px;
+
+            color: #9da39f;
+
+            font-size: 9px;
+        }
+
+        /* REVIEW */
+
+        .review-box {
+            max-width: 900px;
+
+            margin: 65px auto 0;
+
+            padding: 34px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 28px;
+
+            background: var(--cream);
+        }
+
+        .review-box h4 {
+            color: var(--green-800);
+
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .form-control,
+        .form-select {
+            min-height: 49px;
+
+            border: 1px solid #dedfd9;
+
+            border-radius: 14px;
+
+            padding: 11px 14px;
+
+            background: white;
+
+            font-size: 12px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--green);
+
+            box-shadow: 0 0 0 4px rgba(25,76,45,.08);
+        }
+
+        /* =========================================================
+           CTA
+        ========================================================= */
+
+        .cta {
+            position: relative;
+            overflow: hidden;
+
+            padding: 82px 0;
+
+            background:
+                radial-gradient(
+                    circle at 85% 20%,
+                    rgba(255,255,255,.15),
+                    transparent 25%
+                ),
+                var(--orange);
+
+            color: white;
+        }
+
+        .cta::after {
+            content: "";
+
+            position: absolute;
+
+            width: 420px;
+            height: 420px;
+
+            right: -230px;
+            bottom: -280px;
+
+            border: 1px solid rgba(255,255,255,.15);
+
+            border-radius: 50%;
+        }
+
+        .cta-title {
+            position: relative;
+            z-index: 1;
+
+            max-width: 700px;
+
+            font-family: "Playfair Display", serif;
+
+            font-size: clamp(35px, 5vw, 57px);
+            line-height: 1.08;
+
+            font-weight: 700;
+        }
+
+        .cta-text {
+            position: relative;
+            z-index: 1;
+
+            max-width: 650px;
+
+            color: rgba(255,255,255,.8);
+
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .cta .section-label {
+            color: white;
+        }
+
+        .cta .btn-light {
+            position: relative;
+            z-index: 2;
+
+            min-height: 53px;
+
+            padding: 0 25px;
+
+            border: none;
+
+            border-radius: 100px;
+
+            color: var(--orange);
+
+            font-size: 12px;
+            font-weight: 800;
+
+            transition: .3s;
+        }
+
+        .cta .btn-light:hover {
+            transform: translateY(-4px);
+
+            box-shadow: 0 18px 35px rgba(95,35,7,.2);
+        }
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        footer {
+            position: relative;
+
+            padding: 80px 0 25px;
+
+            background: var(--green-950);
+
+            color: white;
+        }
+
+        .footer-brand {
+            color: white;
+
+            font-family: "Playfair Display", serif;
+
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .footer-subtitle {
+            margin-top: 5px;
+
+            color: #ffb477;
+
+            font-size: 8px;
+            font-weight: 800;
+
+            letter-spacing: 2.5px;
+        }
+
+        .footer-description {
+            max-width: 290px;
+
+            margin-top: 17px;
+
+            color: rgba(255,255,255,.48);
+
+            font-size: 11px;
+            line-height: 1.9;
+        }
+
+        .footer-title {
+            margin-bottom: 21px;
+
+            color: #ffad72;
+
+            font-size: 10px;
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+        }
+
+        .footer-links {
+            padding: 0;
+            margin: 0;
+
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 13px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,.55);
+
+            font-size: 11px;
+
+            transition: .25s;
+        }
+
+        .footer-links a:hover {
+            padding-left: 5px;
+            color: white;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 11px;
+
+            margin-bottom: 16px;
+
+            color: rgba(255,255,255,.55);
+
+            font-size: 11px;
+        }
+
+        .contact-item i {
+            width: 17px;
+
+            color: #ff9b5c;
+        }
+
+        .socials {
+            display: flex;
+            gap: 8px;
+
+            margin-top: 25px;
+        }
+
+        .social {
+            width: 38px;
+            height: 38px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 1px solid rgba(255,255,255,.12);
+
+            border-radius: 50%;
+
+            color: white;
+
+            transition: .3s;
+        }
+
+        .social:hover {
+            color: white;
+
+            background: var(--orange);
+            border-color: var(--orange);
+
+            transform: translateY(-4px);
+        }
+
+        .newsletter {
+            margin-top: 20px;
+        }
+
+        .newsletter-form {
+            display: flex;
+
+            padding: 5px;
+
+            border: 1px solid rgba(255,255,255,.12);
+
+            border-radius: 100px;
+
+            background: rgba(255,255,255,.04);
+        }
+
+        .newsletter-form input {
+            width: 100%;
+
+            border: none;
+            outline: none;
+
+            padding: 8px 12px;
+
+            background: transparent;
+
+            color: white;
+
+            font-size: 10px;
+        }
+
+        .newsletter-form input::placeholder {
+            color: rgba(255,255,255,.4);
+        }
+
+        .newsletter-form button {
+            width: 38px;
+            height: 38px;
+
+            flex-shrink: 0;
+
+            border: none;
+
+            border-radius: 50%;
+
+            color: white;
+            background: var(--orange);
+
+            transition: .3s;
+        }
+
+        .newsletter-form button:hover {
+            background: white;
+            color: var(--orange);
+        }
+
+        .copyright {
+            margin-top: 60px;
+
+            padding-top: 23px;
+
+            border-top: 1px solid rgba(255,255,255,.08);
+
+            color: rgba(255,255,255,.32);
+
+            font-size: 9px;
+
+            text-align: center;
+        }
 
         /* =========================================================
            TOAST
-        ========================================================== */
+        ========================================================= */
 
         #toast {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 2000;
-            display: none;
+
+            right: 25px;
+            bottom: 25px;
+
+            z-index: 5000;
+
+            display: flex;
             align-items: center;
-            gap: 12px;
-            background: var(--brand-green);
+            gap: 11px;
+
+            max-width: 360px;
+
+            padding: 15px 19px;
+
+            border: 1px solid rgba(255,255,255,.1);
+
+            border-radius: 16px;
+
+            background: var(--green-950);
             color: white;
-            padding: 14px 20px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+
+            box-shadow: var(--shadow-lg);
+
+            transform: translateY(130px);
+
+            opacity: 0;
+
+            transition: .4s;
         }
 
         #toast.show {
-            display: flex;
+            transform: translateY(0);
+            opacity: 1;
         }
 
         #toast i {
-            color: var(--brand-orange);
+            color: #ffae72;
         }
 
+        #toastMsg {
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* =========================================================
+           BACK TO TOP
+        ========================================================= */
+
+        .back-top {
+            position: fixed;
+
+            right: 24px;
+            bottom: 90px;
+
+            width: 43px;
+            height: 43px;
+
+            z-index: 1000;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: none;
+            border-radius: 50%;
+
+            color: white;
+            background: var(--green);
+
+            box-shadow: var(--shadow-md);
+
+            opacity: 0;
+            visibility: hidden;
+
+            transform: translateY(10px);
+
+            transition: .3s;
+        }
+
+        .back-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-top:hover {
+            background: var(--orange);
+            transform: translateY(-3px);
+        }
+
+        /* =========================================================
+           REVEAL ANIMATION
+        ========================================================= */
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+
+            transition:
+                opacity .7s ease,
+                transform .7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         /* =========================================================
            RESPONSIVE
-        ========================================================== */
+        ========================================================= */
 
-        @media (max-width: 991.98px) {
+        @media (max-width: 1199px) {
 
-            .hero-section {
-                padding: 40px 0 50px;
+            .hero-title {
+                font-size: 70px;
+            }
+
+            .hero-image {
+                height: 500px;
+            }
+
+            .hero-badge {
+                left: 0;
+            }
+
+            .hero-floating {
+                right: 0;
+            }
+        }
+
+        @media (max-width: 991px) {
+
+            .top-bar-content {
+                justify-content: center;
+            }
+
+            .top-links {
+                display: none;
+            }
+
+            .navbar {
+                min-height: 72px;
+            }
+
+            .navbar-collapse {
+                padding: 15px 0 20px;
+            }
+
+            .navbar-nav {
+                gap: 4px;
+            }
+
+            .nav-link {
+                padding: 11px 13px !important;
+            }
+
+            .nav-actions {
+                margin-top: 10px;
+                padding-top: 15px;
+
+                border-top: 1px solid var(--border);
+            }
+
+            .hero {
+                padding: 70px 0 90px;
+            }
+
+            .hero-title {
+                font-size: clamp(54px, 9vw, 76px);
+            }
+
+            .hero-visual {
+                margin-top: 30px;
+            }
+
+            .hero-image {
+                height: 480px;
+            }
+
+            .section-padding {
+                padding: 90px 0;
+            }
+
+            .farmer-box {
+                margin-top: 20px;
+            }
+
+            .delivery-image-wrap {
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 767px) {
+
+            .section-padding {
+                padding: 75px 0;
+            }
+
+            .section-title {
+                font-size: 39px;
+            }
+
+            .hero {
+                padding: 55px 0 75px;
+            }
+
+            .hero-title {
+                font-size: 51px;
+                letter-spacing: -2px;
+            }
+
+            .hero-text {
+                font-size: 13px;
+            }
+
+            .hero-stats {
+                gap: 28px;
+            }
+
+            .hero-stat:not(:last-child)::after {
+                display: none;
+            }
+
+            .hero-image {
+                height: 410px;
+            }
+
+            .hero-badge {
+                left: -2px;
+                bottom: 20px;
+                width: 140px;
+            }
+
+            .hero-floating {
+                right: -2px;
+                top: 20px;
+            }
+
+            .trust-item {
+                justify-content: flex-start;
+                font-size: 10px;
+            }
+
+            .farmer-image {
+                height: 430px;
+            }
+
+            .farmer-label {
+                left: 10px;
+            }
+
+            .delivery-image {
+                height: 400px;
+            }
+
+            .delivery-floating {
+                right: 10px;
+            }
+
+            .review-box {
+                padding: 23px;
+            }
+
+            .cta {
+                padding: 65px 0;
+            }
+
+            .cta-title {
+                font-size: 40px;
+            }
+
+            .newsletter {
+                max-width: 350px;
+            }
+        }
+
+        @media (max-width: 575px) {
+
+            .top-bar {
+                display: none;
+            }
+
+            .brand-logo {
+                width: 43px;
+                height: 43px;
+            }
+
+            .brand-name {
+                font-size: 17px;
             }
 
             .hero-title {
                 font-size: 45px;
             }
 
-            .hero-image-container {
-                margin-top: 30px;
+            .hero-buttons {
+                width: 100%;
             }
 
-            .navbar-nav {
-                padding-top: 15px;
+            .hero-buttons a {
+                width: 100%;
             }
 
-            .navbar-nav .nav-link {
-                padding: 10px 0;
+            .hero-stats {
+                justify-content: space-between;
+                gap: 10px;
             }
 
-        }
-
-        @media (max-width: 575.98px) {
-
-            .hero-title {
-                font-size: 38px;
+            .hero-stat strong {
+                font-size: 20px;
             }
 
-            .hero-description {
-                font-size: 15px;
+            .hero-stat span {
+                font-size: 8px;
             }
 
-            .hero-main-image {
-                height: 300px;
+            .hero-image-wrapper {
+                padding: 6px;
+                border-radius: 28px;
             }
 
-            .egg-card {
-                width: 48%;
-                left: 10px;
-                bottom: 10px;
+            .hero-image {
+                height: 350px;
+                border-radius: 23px;
             }
 
-            .egg-card img {
-                height: 100px;
+            .hero-image-overlay {
+                inset: 6px;
+                border-radius: 23px;
             }
 
-            .product-card {
-                width: 45%;
+            .hero-image-caption {
+                left: 24px;
+                bottom: 20px;
+            }
+
+            .hero-image-caption strong {
+                font-size: 20px;
+            }
+
+            .hero-badge {
+                width: 125px;
+                padding: 14px;
+            }
+
+            .hero-badge-icon {
+                width: 37px;
+                height: 37px;
+            }
+
+            .hero-floating {
+                padding: 10px 12px;
+            }
+
+            .hero-floating span {
+                font-size: 8px;
+            }
+
+            .trust-strip {
+                padding: 18px 0;
+            }
+
+            .trust-item i {
+                font-size: 14px;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+
+            .farmer-image {
+                height: 350px;
+            }
+
+            .delivery-image {
+                height: 330px;
+            }
+
+            .delivery-floating {
+                top: 15px;
                 right: 10px;
+            }
+
+            .cta-title {
+                font-size: 35px;
+            }
+
+            #toast {
+                left: 15px;
+                right: 15px;
                 bottom: 15px;
-                padding: 8px;
             }
 
-            .product-card-inner {
-                padding: 7px;
-            }
-
-            .farmer-container {
-                width: 250px;
-                height: 250px;
-            }
-
-            .quality-badge {
-                width: 90px;
-                height: 90px;
-            }
-
-            .quality-badge strong {
-                font-size: 16px;
-            }
-
-            .feature-small {
-                min-height: 55px;
+            .back-top {
+                right: 15px;
+                bottom: 75px;
             }
         }
-         /* ================= HEADER & TOP BAR ================= */
-
 
     </style>
 </head>
+
 <body>
+
+<!-- =========================================================
+     LOADER
+========================================================= -->
+
+<div class="page-loader" id="pageLoader">
+
+    <div class="loader-content">
+
+        <div class="loader-leaf">
+            <i class="fa-solid fa-seedling"></i>
+        </div>
+
+        <strong>Farm Fresh</strong>
+
+        <span>ORGANIC PRODUCTS</span>
+
+    </div>
+
+</div>
+
+
+<!-- SCROLL PROGRESS -->
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
 <!-- =========================================================
      HEADER
-========================================================== -->
+========================================================= -->
+
 <header class="main-header">
+
     <nav class="navbar navbar-expand-lg">
+
         <div class="container">
-            <a href="#home" class="navbar-brand d-flex align-items-center gap-2">
+
+            <a href="#home" class="brand">
 
                 <img
                     src="https://imgs.search.brave.com/WHOTEWAyl_rVGfQLADYZphKn4_KapBRnncpI16sYU0Y/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTEz/MjM2MDM2NC92ZWN0/b3IvdmVjdG9yLWdy/ZWVuLWVtYmxlbS1m/YXJtLWZyZXNoLXdp/dGgtZGVjb3JhdGl2/ZS1sZWF2ZXMtYnJp/Z2h0LWFscGhhYmV0/LWxldHRlcnMtbnVt/YmVycy1hbmQuanBn/P3M9NjEyeDYxMiZ3/PTAmaz0yMCZjPXl1/UDd2b0JiakZVcExm/eXVLaWp6U2dWcUlz/cjMwdHEzQUR6OFJT/dkZKYXM9"
-                    alt="Farm Fresh">
+                    class="brand-logo"
+                    alt="Farm Fresh Logo">
 
                 <div>
-                    <div class="brand-title">
+
+                    <div class="brand-name">
                         Farm Fresh
                     </div>
 
                     <div class="brand-subtitle">
                         ORGANIC PRODUCTS
                     </div>
+
                 </div>
+
             </a>
+
+
             <button
                 class="navbar-toggler"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#mainNavbar"
-                aria-controls="mainNavbar"
-                aria-expanded="false"
                 aria-label="Toggle navigation">
 
-                <span class="navbar-toggler-icon"></span>
+                <i class="fa-solid fa-bars-staggered"></i>
 
             </button>
 
-
-            <!-- NAVIGATION -->
 
             <div
                 class="collapse navbar-collapse"
                 id="mainNavbar">
 
-                <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
 
                     <li class="nav-item">
-                        <a
-                            href="#home"
-                            class="nav-link active">
+                        <a href="#home" class="nav-link active">
                             Home
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a
-                            href="{{ route ('shoppage') }}"
-                            class="nav-link">
+                        <a href="{{ route('shoppage') }}" class="nav-link">
                             Shop
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a
-                            href="{{ route('about') }}"
-                            class="nav-link">
-                            About Us
+                        <a href="{{ route('about') }}" class="nav-link">
+                            About
                         </a>
                     </li>
 
-                    
+                    <li class="nav-item">
+                        <a href="#products" class="nav-link">
+                            Products
+                        </a>
+                    </li>
 
                     <li class="nav-item">
-                        <a
-                            href="#contact"
-                            class="nav-link " style="margin-right: 200px">
+                        <a href="{{ route('contact') }}" class="nav-link">
                             Contact
                         </a>
                     </li>
 
-
-                    <!-- DASHBOARD -->
-
-                    <li class="nav-item ms-lg-2"></li>
-
-
-                    <!-- REGISTER -->
-
-                    <li class="nav-item">
-
-                        <a
-                            href="{{ route('register') }}"
-                            class="nav-link"style="margin-left: 200px">
-
-                            Register
-
-                        </a>
-
-                    </li>
-
-
-                    <!-- LOGIN -->
-
-                    <li class="nav-item">
-
-                        <a
-                            href="{{ route('login') }}"
-                            class="nav-link">
-
-                            Login
-
-                        </a>
-
-                    </li>
-
-
-                    <!-- CART -->
                 </ul>
+
+
+                <div class="nav-actions ms-lg-3">
+
+                    <a
+                        href="{{ route('login') }}"
+                        class="nav-login">
+
+                        Login
+
+                    </a>
+
+                    <a
+                        href="{{ route('register') }}"
+                        class="nav-register">
+
+                        Register
+
+                    </a>
+
+                </div>
 
             </div>
 
@@ -909,557 +2442,164 @@
 </header>
 
 
-
 <!-- =========================================================
      HERO
-========================================================== -->
+========================================================= -->
 
-<section
-    id="home"
-    class="hero-section">
+<section class="hero" id="home">
 
     <div class="container">
 
         <div class="row align-items-center g-5">
 
+            <div class="col-lg-6">
 
-            <!-- LEFT -->
+                <div class="hero-content reveal">
+
+                    <div class="hero-label">
+
+                        <i class="fa-solid fa-seedling"></i>
+
+                        100% Fresh & Natural
+
+                    </div>
+
+
+                    <h1 class="hero-title">
+
+                        From the
+
+                        <span>Farm</span>
+
+                        <br>
+
+                        to Your Table.
+
+                    </h1>
+
+
+                    <p class="hero-text">
+
+                        Discover fresh, safe and nutritious farm
+                        products carefully selected from trusted
+                        sources and delivered directly to your home
+                        or business.
+
+                    </p>
+
+
+                    <div class="hero-buttons">
+
+                        <a
+                            href="#products"
+                            class="btn-orange">
+
+                            Explore Products
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </a>
+
+
+                        <a
+                            href="{{ route('shoppage') }}"
+                            class="btn-outline">
+
+                            Shop Fresh
+
+                            <i class="fa-solid fa-basket-shopping"></i>
+
+                        </a>
+
+                    </div>
+
+
+                    <div class="hero-stats">
+
+                        <div class="hero-stat">
+
+                            <strong>100%</strong>
+
+                            <span>Fresh</span>
+
+                        </div>
+
+                        <div class="hero-stat">
+
+                            <strong>24/7</strong>
+
+                            <span>Ordering</span>
+
+                        </div>
+
+                        <div class="hero-stat">
+
+                            <strong>Fast</strong>
+
+                            <span>Delivery</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
 
             <div class="col-lg-6">
 
-                <h1 class="hero-title">
+                <div class="hero-visual reveal">
 
-                    Fresh & Organic
-
-                    <br>
-
-                    <span>Products</span>
-
-                    for You.
-
-                </h1>
-
-
-                <p class="hero-description mt-4">
-
-                    Fresh, safe and nutritious products delivered directly
-                    from trusted farms to your home and business.
-
-                </p>
-
-
-                <div class="d-flex flex-wrap gap-3 mt-4">
-
-                    {{-- <button
-                        onclick="openQuoteModal()"
-                        class="btn btn-brand-green px-4 py-3 fw-bold">
-
-                        <i class="fa-solid fa-handshake text-warning me-2"></i>
-
-                        Get a Quote
-
-                    </button> --}}
-
-
-                    <a
-                        href="#products"
-                        class="btn btn-outline-brand-orange px-4 py-3 fw-bold">
-
-                        View Products
-
-                        <i class="fa-solid fa-arrow-right ms-2"></i>
-
-                    </a>
-
-                </div>
-
-
-                <!-- FEATURES -->
-
-                <div class="row row-cols-2 row-cols-sm-4 g-2 mt-4">
-
-                    <div class="col">
-
-                        <div class="feature-small">
-
-                            <div class="feature-icon">
-                                <i class="fa-solid fa-leaf"></i>
-                            </div>
-
-                            <span>
-                                Fresh Every Day
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="col">
-
-                        <div class="feature-small">
-
-                            <div class="feature-icon">
-                                <i class="fa-solid fa-shield-halved"></i>
-                            </div>
-
-                            <span>
-                                Quality Assured
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="col">
-
-                        <div class="feature-small">
-
-                            <div class="feature-icon">
-                                <i class="fa-solid fa-truck-fast"></i>
-                            </div>
-
-                            <span>
-                                Fast Delivery
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="col">
-
-                        <div class="feature-small">
-
-                            <div class="feature-icon">
-                                <i class="fa-solid fa-boxes-stacked"></i>
-                            </div>
-
-                            <span>
-                                Bulk Supply
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- RIGHT -->
-
-            <div class="col-lg-6">
-
-                <div class="hero-image-container">
-                         <img src="https://i.pinimg.com/1200x/e9/b1/67/e9b16750a87a69e8d182899c1a3fed8d.jpg" class="w-100" style="height:400px; object-fit:cover;">
-                    {{-- <img
-                        src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=1000&auto=format&fit=crop&q=80"
-                        alt="Organic Farm"
-                        class="hero-main-image">
-
-                    <div class="hero-overlay"></div>
-
-
-                    <!-- EGGS -->
-
-                    <div class="egg-card">
+                    <div class="hero-image-wrapper">
 
                         <img
-                            src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=500&auto=format&fit=crop&q=80"
-                            alt="Fresh Eggs">
+                            src="https://i.pinimg.com/1200x/e9/b1/67/e9b16750a87a69e8d182899c1a3fed8d.jpg"
+                            class="hero-image"
+                            alt="Fresh farm products">
 
-                    </div>
+                        <div class="hero-image-overlay"></div>
 
+                        <div class="hero-image-caption">
 
-                    <!-- PRODUCT CARD -->
+                            <small>
+                                Straight from nature
+                            </small>
 
-                    <div class="product-card">
-
-                        <div class="product-card-inner">
-
-                            <div class="d-flex align-items-center gap-2 mb-2">
-
-                                <div
-                                    class="rounded-circle bg-brand-orange text-white d-flex align-items-center justify-content-center"
-                                    style="width:22px;height:22px;font-size:10px;">
-
-                                    <i class="fa-solid fa-egg"></i>
-
-                                </div>
-
-                                <span
-                                    class="fw-bold text-brand-green"
-                                    style="font-size:12px;">
-
-                                    Swasth Ande
-
-                                </span>
-
-                            </div>
-
-
-                            <p
-                                class="text-secondary mb-2"
-                                style="font-size:9px;letter-spacing:1px;">
-
-                                ORGANIC PRODUCTS
-
-                            </p>
-
-
-                            <div
-                                class="border-top pt-2 d-flex justify-content-between"
-                                style="font-size:10px;">
-
-                                <span class="text-success fw-bold">
-
-                                    <i class="fa-solid fa-check-circle"></i>
-
-                                    Fresh
-
-                                </span>
-
-                                <span class="text-success fw-bold">
-
-                                    Premium
-
-                                </span>
-
-                            </div>
+                            <strong>
+                                Freshness you can see.
+                            </strong>
 
                         </div>
 
-                    </div> --}}
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- =========================================================
-     PRODUCTS
-========================================================== -->
-
-<section
-    id="products"
-    class="py-5 bg-cream">
-
-    <div class="container">
-
-        <div class="text-center mb-5">
-
-            <div class="section-title-small">
-                OUR PRODUCTS
-            </div>
-
-            <h2 class="section-title mt-2">
-               SEE ALL PRODUCTS
-            </h2>
-
-            <div class="orange-line"></div>
-
-        </div>
-
-
-        <div class="row row-cols-2 row-cols-sm-3 row-cols-lg-5 g-4">
-
-
-            <!-- VEGETABLES -->
-
-            <div class="col">
-
-                <a
-                    href="{{ route('showproduct.Vegetable') }}"
-                    class="product-category">
-
-                    <div class="product-image-circle">
-
-                        <img
-                            src="https://i.pinimg.com/1200x/17/51/39/175139fee4ab5050c15347f075f0abe0.jpg"
-                            alt="Vegetables">
-
                     </div>
 
-                    <h3>
-                        Vegetables
-                    </h3>
 
-                </a>
+                    <div class="hero-badge">
 
-            </div>
+                        <div class="hero-badge-icon">
 
-
-            <!-- FRUITS -->
-
-            <div class="col">
-
-                <a
-                    href="{{ route('showproduct.Fruit') }}"
-                    class="product-category">
-
-                    <div class="product-image-circle">
-
-                        <img
-                            src="https://i.pinimg.com/736x/87/5c/19/875c19f4c3aff56b51416c2295f13145.jpg"
-                            alt="Fruits">
-
-                    </div>
-
-                    <h3>
-                        Fruits
-                    </h3>
-
-                </a>
-
-            </div>
-
-
-            <!-- FRESH NUTS -->
-
-            <div class="col">
-
-                <a
-                    href="{{ route('showproduct.Freshnut') }}"
-                    class="product-category">
-
-                    <div class="product-image-circle">
-
-                        <img
-                            src="https://i.pinimg.com/1200x/02/f1/52/02f1527da53638f41faca5deeb929d91.jpg"
-                            alt="Fresh Nuts">
-
-                    </div>
-
-                    <h3>
-                        Fresh Nuts
-                    </h3>
-
-                </a>
-
-            </div>
-
-
-            <!-- JUICES -->
-
-            <div class="col">
-
-                <a
-                    href="{{ route('showproduct.Farmanimal') }}"
-                    class="product-category">
-
-                    <div class="product-image-circle">
-
-                        <img
-                            src="https://i.pinimg.com/736x/6b/ac/b8/6bacb8590a4fdf6f9fc7f7b13f734cd5.jpg"
-                            alt="Juices">
-
-                    </div>
-
-                    <h3>
-                        Farm animal
-                    </h3>
-
-                </a>
-
-            </div>
-
-
-            <!-- EGGS -->
-
-            <div class="col">
-
-                <a
-                    href="{{ route('showproduct.Egg') }}"
-                    class="product-category">
-
-                    <div class="product-image-circle">
-
-                        <img
-                            src="https://i.pinimg.com/736x/1b/3e/0b/1b3e0b856b8937e09353290c7f9e3f88.jpg"
-                            alt="Eggs">
-
-                    </div>
-
-                    <h3>
-                        Eggs
-                    </h3>
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- =========================================================
-     WHY CHOOSE US
-========================================================== -->
-
-<section
-    id="why-us"
-    class="why-section py-5">
-
-    <div class="container">
-
-        <div class="mb-5">
-
-            <div class="section-title-small">
-                WHY CHOOSE US?
-            </div>
-
-            <div
-                class="orange-line ms-0">
-            </div>
-
-        </div>
-
-
-        <div class="row align-items-center g-5">
-
-
-            <!-- FEATURES -->
-
-            <div class="col-lg-7">
-
-                <div class="row row-cols-1 row-cols-sm-2 g-4">
-
-
-                    <div class="col">
-
-                        <div class="why-card">
-
-                            <div class="why-icon">
-
-                                <i class="fa-solid fa-seedling"></i>
-
-                            </div>
-
-                            <h3>
-                                Farm Fresh
-                            </h3>
-
-                            <p>
-                                Sourced directly from trusted farms
-                            </p>
+                            <i class="fa-solid fa-leaf"></i>
 
                         </div>
-
-                    </div>
-
-
-                    <div class="col">
-
-                        <div class="why-card">
-
-                            <div class="why-icon">
-
-                                <i class="fa-solid fa-award"></i>
-
-                            </div>
-
-                            <h3>
-                                Quality Assured
-                            </h3>
-
-                            <p>
-                                Hygienic, fresh and carefully selected
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="col">
-
-                        <div class="why-card">
-
-                            <div class="why-icon">
-
-                                <i class="fa-solid fa-user-group"></i>
-
-                            </div>
-
-                            <h3>
-                                Trusted by Many
-                            </h3>
-
-                            <p>
-                                Serving customers with quality products
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="col">
-
-                        <div class="why-card">
-
-                            <div class="why-icon">
-
-                                <i class="fa-solid fa-truck-ramp-box"></i>
-
-                            </div>
-
-                            <h3>
-                                Timely Delivery
-                            </h3>
-
-                            <p>
-                                Fast and reliable delivery
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- FARMER -->
-
-            <div class="col-lg-5">
-
-                <div class="farmer-container">
-
-                    <div class="farmer-border"></div>
-
-                    <img
-                        src=""
-                        alt="Farmer"
-                        class="farmer-image">
-
-
-                    <div class="quality-badge">
 
                         <strong>
-                            100%
+                            Farm Fresh
                         </strong>
 
+                        <small>
+                            Carefully selected
+                        </small>
+
+                    </div>
+
+
+                    <div class="hero-floating">
+
+                        <i class="fa-solid fa-star"></i>
+
                         <span>
-                            Quality
-                            <br>
-                            Assured
+                            Quality You Can Trust
                         </span>
 
                     </div>
@@ -1475,32 +2615,537 @@
 </section>
 
 
-
 <!-- =========================================================
-     INDUSTRIES
-========================================================== -->
+     TRUST STRIP
+========================================================= -->
 
-<section
-    id="industries"
-    class="py-5">
+<section class="trust-strip">
 
     <div class="container">
 
-        <div class="text-center text-md-start mb-5">
+        <div class="row g-3">
 
-            <div class="section-title-small">
-                INDUSTRIES WE SERVE
+            <div class="col-6 col-lg-3">
+
+                <div class="trust-item">
+
+                    <i class="fa-solid fa-leaf"></i>
+
+                    Fresh Every Day
+
+                </div>
+
             </div>
 
-            <div class="orange-line ms-md-0"></div>
+            <div class="col-6 col-lg-3">
+
+                <div class="trust-item">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    Quality Assured
+
+                </div>
+
+            </div>
+
+            <div class="col-6 col-lg-3">
+
+                <div class="trust-item">
+
+                    <i class="fa-solid fa-truck-fast"></i>
+
+                    Fast Delivery
+
+                </div>
+
+            </div>
+
+            <div class="col-6 col-lg-3">
+
+                <div class="trust-item">
+
+                    <i class="fa-solid fa-heart"></i>
+
+                    Trusted Service
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     PRODUCTS
+========================================================= -->
+
+<section
+    id="products"
+    class="products-section section-padding">
+
+    <div class="container">
+
+        <div class="text-center mb-5 reveal">
+
+            <div class="section-label justify-content-center">
+                What We Offer
+            </div>
+
+            <h2 class="section-title mt-3">
+                Freshness in Every Choice
+            </h2>
+
+            <p class="section-description mx-auto mt-3">
+
+                Explore our carefully selected range of fresh
+                vegetables, fruits, nuts, eggs and farm products.
+
+            </p>
 
         </div>
 
 
-        <div class="row row-cols-2 row-cols-md-5 g-4">
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
 
 
-            <div class="col">
+            <!-- VEGETABLES -->
+
+            <div class="col reveal">
+
+                <a
+                    href="{{ route('showproduct.Vegetable') }}"
+                    class="product-card">
+
+                    <div class="product-image">
+
+                        <img
+                            src="https://i.pinimg.com/1200x/17/51/39/175139fee4ab5050c15347f075f0abe0.jpg"
+                            alt="Fresh vegetables">
+
+                        <div class="product-icon">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+
+                    </div>
+
+                    <div class="product-content">
+
+                        <h3>
+                            Vegetables
+                        </h3>
+
+                        <p>
+                            Fresh & nutritious
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- FRUITS -->
+
+            <div class="col reveal">
+
+                <a
+                    href="{{ route('showproduct.Fruit') }}"
+                    class="product-card">
+
+                    <div class="product-image">
+
+                        <img
+                            src="https://i.pinimg.com/736x/87/5c/19/875c19f4c3aff56b51416c2295f13145.jpg"
+                            alt="Fresh fruits">
+
+                        <div class="product-icon">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+
+                    </div>
+
+                    <div class="product-content">
+
+                        <h3>
+                            Fruits
+                        </h3>
+
+                        <p>
+                            Sweet & natural
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- FRESH NUTS -->
+
+            <div class="col reveal">
+
+                <a
+href="{{ route('showproduct.FreshNut') }}"
+                    class="product-card">
+
+                    <div class="product-image">
+
+                        <img
+                            src="https://i.pinimg.com/1200x/02/f1/52/02f1527da53638f41faca5deeb929d91.jpg"
+                            alt="Fresh nuts">
+
+                        <div class="product-icon">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+
+                    </div>
+
+                    <div class="product-content">
+
+                        <h3>
+                            Fresh Nuts
+                        </h3>
+
+                        <p>
+                            Healthy & premium
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- FARM ANIMALS -->
+
+            <div class="col reveal">
+
+                <a
+                    href="{{ route('showproduct.Farmanimal') }}"
+                    class="product-card">
+
+                    <div class="product-image">
+
+                        <img
+                            src="https://i.pinimg.com/736x/6b/ac/b8/6bacb8590a4fdf6f9fc7f7b13f734cd5.jpg"
+                            alt="Farm animals">
+
+                        <div class="product-icon">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+
+                    </div>
+
+                    <div class="product-content">
+
+                        <h3>
+                            Farm Animals
+                        </h3>
+
+                        <p>
+                            Healthy farm stock
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- EGGS -->
+
+            <div class="col reveal">
+
+                <a
+                    href="{{ route('showproduct.Egg') }}"
+                    class="product-card">
+
+                    <div class="product-image">
+
+                        <img
+                            src="https://i.pinimg.com/736x/1b/3e/0b/1b3e0b856b8937e09353290c7f9e3f88.jpg"
+                            alt="Fresh eggs">
+
+                        <div class="product-icon">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+
+                    </div>
+
+                    <div class="product-content">
+
+                        <h3>
+                            Fresh Eggs
+                        </h3>
+
+                        <p>
+                            Farm fresh daily
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     MARQUEE
+========================================================= -->
+
+<div class="marquee">
+
+    <div class="marquee-track">
+
+        <div class="marquee-item">
+            Farm Fresh
+            <i class="fa-solid fa-leaf"></i>
+            Naturally Better
+        </div>
+
+        <div class="marquee-item">
+            Fresh Every Day
+            <i class="fa-solid fa-leaf"></i>
+            Quality You Can Trust
+        </div>
+
+        <div class="marquee-item">
+            From Farm to Table
+            <i class="fa-solid fa-leaf"></i>
+            Healthy Choices
+        </div>
+
+        <div class="marquee-item">
+            Farm Fresh
+            <i class="fa-solid fa-leaf"></i>
+            Naturally Better
+        </div>
+
+        <div class="marquee-item">
+            Fresh Every Day
+            <i class="fa-solid fa-leaf"></i>
+            Quality You Can Trust
+        </div>
+
+        <div class="marquee-item">
+            From Farm to Table
+            <i class="fa-solid fa-leaf"></i>
+            Healthy Choices
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     WHY US
+========================================================= -->
+
+<section
+    id="why-us"
+    class="why-section section-padding">
+
+    <div class="container">
+
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-6">
+
+                <div class="reveal">
+
+                    <div class="section-label">
+                        Why Farm Fresh
+                    </div>
+
+                    <h2 class="section-title mt-3">
+                        Good Food Starts With Good Farming.
+                    </h2>
+
+                    <p class="section-description mt-3">
+
+                        We believe everyone deserves access to fresh,
+                        nutritious and trustworthy farm products.
+                        That's why we focus on quality from source
+                        to delivery.
+
+                    </p>
+
+                </div>
+
+
+                <div class="row g-3 mt-4">
+
+                    <div class="col-sm-6 reveal">
+
+                        <div class="why-card">
+
+                            <div class="why-icon">
+                                <i class="fa-solid fa-seedling"></i>
+                            </div>
+
+                            <h3>
+                                Farm Fresh
+                            </h3>
+
+                            <p>
+                                Products sourced directly from
+                                trusted farms and suppliers.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-sm-6 reveal">
+
+                        <div class="why-card">
+
+                            <div class="why-icon">
+                                <i class="fa-solid fa-award"></i>
+                            </div>
+
+                            <h3>
+                                Quality Assured
+                            </h3>
+
+                            <p>
+                                Every product is carefully selected
+                                for quality and freshness.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-sm-6 reveal">
+
+                        <div class="why-card">
+
+                            <div class="why-icon">
+                                <i class="fa-solid fa-truck-fast"></i>
+                            </div>
+
+                            <h3>
+                                Fast Delivery
+                            </h3>
+
+                            <p>
+                                Fresh products delivered safely
+                                and efficiently.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-sm-6 reveal">
+
+                        <div class="why-card">
+
+                            <div class="why-icon">
+                                <i class="fa-solid fa-heart"></i>
+                            </div>
+
+                            <h3>
+                                Trusted Service
+                            </h3>
+
+                            <p>
+                                Your satisfaction is always
+                                at the heart of what we do.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-6">
+
+                <div class="farmer-box reveal">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=1000&auto=format&fit=crop&q=80"
+                        class="farmer-image"
+                        alt="Farmer working in a farm">
+
+                    <div class="farmer-label">
+
+                        <strong>
+                            100%
+                        </strong>
+
+                        <span>
+                            Freshness & Quality
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     INDUSTRIES
+========================================================= -->
+
+<section class="industry-section section-padding">
+
+    <div class="container">
+
+        <div class="text-center mb-5 reveal">
+
+            <div class="section-label justify-content-center">
+                Who We Serve
+            </div>
+
+            <h2 class="section-title mt-3">
+                From Our Farm to Your Business
+            </h2>
+
+            <p class="section-description mx-auto mt-3">
+
+                Reliable farm products for homes, restaurants,
+                retailers and growing businesses.
+
+            </p>
+
+        </div>
+
+
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
+
+            <div class="col reveal">
 
                 <div class="industry-card">
 
@@ -1508,7 +3153,6 @@
 
                     <h3>
                         Retail &
-                        <br>
                         Supermarkets
                     </h3>
 
@@ -1517,7 +3161,7 @@
             </div>
 
 
-            <div class="col">
+            <div class="col reveal">
 
                 <div class="industry-card">
 
@@ -1525,7 +3169,6 @@
 
                     <h3>
                         Restaurants &
-                        <br>
                         Cafés
                     </h3>
 
@@ -1534,7 +3177,7 @@
             </div>
 
 
-            <div class="col">
+            <div class="col reveal">
 
                 <div class="industry-card">
 
@@ -1542,7 +3185,6 @@
 
                     <h3>
                         Bakeries &
-                        <br>
                         Confectionery
                     </h3>
 
@@ -1551,7 +3193,7 @@
             </div>
 
 
-            <div class="col">
+            <div class="col reveal">
 
                 <div class="industry-card">
 
@@ -1559,7 +3201,6 @@
 
                     <h3>
                         Hotels &
-                        <br>
                         Catering
                     </h3>
 
@@ -1568,7 +3209,7 @@
             </div>
 
 
-            <div class="col">
+            <div class="col reveal">
 
                 <div class="industry-card">
 
@@ -1576,7 +3217,6 @@
 
                     <h3>
                         Food
-                        <br>
                         Industries
                     </h3>
 
@@ -1591,141 +3231,151 @@
 </section>
 
 
-
 <!-- =========================================================
      DELIVERY
-========================================================== -->
+========================================================= -->
 
 <section
     id="delivery"
-    class="delivery-section py-5">
+    class="delivery-section section-padding">
 
     <div class="container">
 
         <div class="row align-items-center g-5">
 
+            <div class="col-lg-6">
 
-            <!-- LEFT -->
+                <div class="delivery-image-wrap reveal">
 
-            <div class="col-lg-5">
+                    <img
+                        src="https://i.pinimg.com/1200x/d7/21/b3/d721b346b2c727ab885ab383dc242c8a.jpg"
+                        class="delivery-image"
+                        alt="Farm delivery">
 
-                <div class="section-title-small">
-                    FAST DELIVERY
+                    <div class="delivery-floating">
+
+                        <strong>
+                            Fresh to Door
+                        </strong>
+
+                        <span>
+                            Carefully handled
+                        </span>
+
+                    </div>
+
                 </div>
-
-                <div class="orange-line ms-0"></div>
-
-                <p class="text-secondary mt-4">
-
-                    Our delivery process is designed to keep products
-                    fresh, safe and ready for your home or business.
-
-                </p>
-
-                <button
-                    onclick="openProcessModal()"
-                    class="btn btn-brand-green px-4 py-3 fw-bold mt-3">
-
-                    Our Delivery Process
-
-                    <i class="fa-solid fa-arrow-right ms-2"></i>
-
-                </button>
 
             </div>
 
 
-            <!-- RIGHT -->
+            <div class="col-lg-6">
 
-            <div class="col-lg-7">
+                <div class="reveal">
 
-                <div class="row g-4">
+                    <div class="section-label">
+                        Our Process
+                    </div>
+
+                    <h2 class="section-title mt-3">
+                        Fresh Products.
+                        Delivered Safely.
+                    </h2>
+
+                    <p class="section-description mt-3">
+
+                        Our delivery process is designed to protect
+                        freshness and quality from the farm all
+                        the way to your door.
+
+                    </p>
+
+                </div>
 
 
-                    <!-- MAP -->
+                <div class="delivery-steps">
 
-                    <div class="col-md-6">
+                    <div class="delivery-step reveal">
 
-                        <div class="map-box">
-                            <img width="320px" src="https://i.pinimg.com/1200x/d7/21/b3/d721b346b2c727ab885ab383dc242c8a.jpg" alt="">
+                        <div class="delivery-number">
+                            01
+                        </div>
 
-                            {{-- <svg
-                                width="200"
-                                height="200"
-                                viewBox="0 0 200 200"
-                                fill="#1c3e27"
-                                opacity="0.15">
+                        <div>
 
-                                <path
-                                    d="M100 10 C140 10, 180 40, 170 90 C160 140, 120 180, 100 190 C80 180, 40 140, 30 90 C20 40, 60 10, 100 10 Z">
-                                </path>
+                            <strong>
+                                Farm Collection
+                            </strong>
 
-                            </svg> --}}
+                            <span>
+                                Products are collected from
+                                trusted farms.
+                            </span>
 
                         </div>
 
                     </div>
 
 
-                    <!-- STEPS -->
+                    <div class="delivery-step reveal">
 
-                    <div class="col-md-6">
-
-                        <div class="delivery-step">
-
-                            <div class="delivery-icon">
-
-                                <i class="fa-solid fa-wheat-awn"></i>
-
-                            </div>
-
-                            <span>
-                                Farm Collection
-                            </span>
-
+                        <div class="delivery-number">
+                            02
                         </div>
 
+                        <div>
 
-                        <div class="delivery-step">
-
-                            <div class="delivery-icon">
-
-                                <i class="fa-solid fa-magnifying-glass"></i>
-
-                            </div>
-
-                            <span>
+                            <strong>
                                 Sorting & Grading
+                            </strong>
+
+                            <span>
+                                Products are checked carefully
+                                for quality.
                             </span>
 
                         </div>
 
+                    </div>
 
-                        <div class="delivery-step">
 
-                            <div class="delivery-icon">
+                    <div class="delivery-step reveal">
 
-                                <i class="fa-solid fa-box"></i>
+                        <div class="delivery-number">
+                            03
+                        </div>
 
-                            </div>
+                        <div>
 
-                            <span>
+                            <strong>
                                 Safe Packaging
+                            </strong>
+
+                            <span>
+                                Products are carefully packed
+                                for protection.
                             </span>
 
                         </div>
 
+                    </div>
 
-                        <div class="delivery-step">
 
-                            <div class="delivery-icon">
+                    <div class="delivery-step reveal">
 
-                                <i class="fa-solid fa-truck-fast"></i>
+                        <div class="delivery-number">
+                            04
+                        </div>
 
-                            </div>
+                        <div>
+
+                            <strong>
+                                Fast Delivery
+                            </strong>
 
                             <span>
-                                Fast Delivery
+                                Your order arrives safely
+                                at your destination.
                             </span>
 
                         </div>
@@ -1733,6 +3383,17 @@
                     </div>
 
                 </div>
+
+
+                <a
+                    href="{{ route('shoppage') }}"
+                    class="btn-main mt-3">
+
+                    Start Shopping
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
 
             </div>
 
@@ -1742,256 +3403,268 @@
 
 </section>
 
+
+<!-- =========================================================
+     TESTIMONIALS
+========================================================= -->
+
+<section
+    id="testimonials"
+    class="testimonial-section section-padding">
+
+    <div class="container">
+
+        <div class="text-center mb-5 reveal">
+
+            <div class="section-label justify-content-center">
+                Customer Stories
+            </div>
+
+            <h2 class="section-title mt-3">
+                What Our Customers Say
+            </h2>
+
+            <p class="section-description mx-auto mt-3">
+                Real experiences from people who enjoy
+                our products and service.
+            </p>
+
+        </div>
+
+
+        <div
+            class="row g-4"
+            id="testimonials-list">
+
+            <div class="col-12 text-center text-muted py-5">
+
+                <div class="spinner-border spinner-border-sm me-2"></div>
+
+                Loading reviews...
+
+            </div>
+
+        </div>
+
+
+        <!-- REVIEW FORM -->
+
+        <div class="review-box reveal">
+
+            <h4>
+
+                <i class="bi bi-pencil-square me-2"></i>
+
+                Share Your Experience
+
+            </h4>
+
+            <p class="text-secondary small mb-4">
+
+                Your feedback helps us improve our products
+                and service.
+
+            </p>
+
+
+            <form id="homepage-review-form">
+
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="user_name"
+                            placeholder="Your name (optional)">
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <select
+                            class="form-select"
+                            name="rating"
+                            required>
+
+                            <option value="" disabled selected>
+                                Select Rating
+                            </option>
+
+                            <option value="5">
+                                ★★★★★ Excellent
+                            </option>
+
+                            <option value="4">
+                                ★★★★ Very Good
+                            </option>
+
+                            <option value="3">
+                                ★★★ Good
+                            </option>
+
+                            <option value="2">
+                                ★★ Fair
+                            </option>
+
+                            <option value="1">
+                                ★ Poor
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-5">
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="comment"
+                            placeholder="Write your review..."
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <input
+                    type="hidden"
+                    name="product_type"
+                    value="homepage">
+
+                <input
+                    type="hidden"
+                    name="product_id"
+                    value="0">
+
+
+                <button
+                    type="submit"
+                    class="btn-main mt-3">
+
+                    Submit Review
+
+                    <i class="fa-solid fa-paper-plane"></i>
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
 
 
 <!-- =========================================================
      CTA
-========================================================== -->
+========================================================= -->
 
-<section class="cta-section">
+<section class="cta">
 
     <div class="container">
 
-        <div class="row align-items-center justify-content-between g-4">
+        <div class="row align-items-center g-4">
 
-            <div class="col-md-8">
+            <div class="col-lg-8">
 
-                <div class="d-flex align-items-center gap-3">
+                <div class="section-label">
 
-                    <img
-                        src="https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=200&auto=format&fit=crop&q=80"
-                        alt="Fresh Eggs"
-                        class="cta-image d-none d-sm-block">
-
-                    <div>
-
-                        <h3 class="fw-bold mb-1">
-                            Let's build a healthy partnership.
-                        </h3>
-
-                        <p class="mb-0 text-white-50">
-                            For bulk orders and inquiries, reach out to our team today.
-                        </p>
-
-                    </div>
+                    Let's Work Together
 
                 </div>
+
+                <h2 class="cta-title mt-3">
+
+                    Fresh products.
+                    Healthy partnerships.
+
+                </h2>
+
+                <p class="cta-text mt-3 mb-0">
+
+                    Looking for reliable farm products for your
+                    restaurant, shop or business? We're ready to help.
+
+                </p>
 
             </div>
 
-{{-- 
-            <div class="col-md-4 text-md-end">
 
-                <button
-                    onclick="openQuoteModal()"
-                    class="btn btn-light text-brand-orange fw-bold px-4 py-3">
+            <div class="col-lg-4 text-lg-end">
 
-                    Get a Quote
+                <a
+                    href="{{ route('shoppage') }}"
+                    class="btn btn-light">
+
+                    Explore Our Shop
 
                     <i class="fa-solid fa-arrow-right ms-2"></i>
 
-                 </button>
+                </a>
 
-            </div> --}}
+            </div>
 
         </div>
 
     </div>
 
 </section>
-
-
-
-<!-- =========================================================
-     TESTIMONIALS / REVIEWS
-========================================================= -->
-<section id="testimonials" class="py-5" style="background: #ffffff;">
-    <div class="container">
-        <div class="text-center mb-5">
-            <div class="section-title-small">TESTIMONIALS</div>
-            <h2 class="section-title mt-2">What Our Customers Say</h2>
-        </div>
-
-        <div class="row g-4" id="testimonials-list">
-            <div class="col-12 text-center text-muted">Loading reviews...</div>
-        </div>
-
-        <!-- Add Review Form -->
-        <div class="mt-5 p-4 rounded-4" style="background: #f8f9fa; border: 1px solid #e9ecef;">
-            <h5 class="fw-bold mb-3"><i class="bi bi-pencil-square me-2"></i>Write a Review</h5>
-            <form id="homepage-review-form">
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" name="user_name" placeholder="Your name (optional)">
-                    </div>
-                    <div class="col-md-3">
-                        <select class="form-select" name="rating" required>
-                            <option value="" disabled selected>Select Rating</option>
-                            <option value="5">5 Stars - Excellent</option>
-                            <option value="4">4 Stars - Very Good</option>
-                            <option value="3">3 Stars - Good</option>
-                            <option value="2">2 Stars - Fair</option>
-                            <option value="1">1 Star - Poor</option>
-                        </select>
-                    </div>
-                    <div class="col-md-5">
-                        <input type="text" class="form-control" name="comment" placeholder="Write your review..." required>
-                    </div>
-                </div>
-                <input type="hidden" name="product_type" value="homepage">
-                <input type="hidden" name="product_id" value="0">
-                <button type="submit" class="btn btn-dark mt-3 px-4">Submit Review</button>
-            </form>
-        </div>
-    </div>
-</section>
-
-<style>
-    .testimonial-card {
-        background: #ffffff;
-        border: 1px solid #e0e0e0;
-        border-radius: 16px;
-        padding: 24px;
-        transition: all 0.3s ease;
-        height: 100%;
-    }
-    .testimonial-card:hover {
-        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-        transform: translateY(-3px);
-    }
-    .testimonial-stars {
-        color: #ffc107;
-        font-size: 0.9rem;
-        margin-bottom: 12px;
-    }
-    .testimonial-text {
-        color: #333;
-        font-size: 0.95rem;
-        line-height: 1.6;
-        margin-bottom: 16px;
-    }
-    .testimonial-author {
-        font-weight: 700;
-        color: #000;
-        font-size: 0.9rem;
-    }
-    .testimonial-date {
-        font-size: 0.75rem;
-        color: #888;
-    }
-</style>
-
-<script>
-    function renderStars(rating) {
-        let stars = '';
-        for (let i = 1; i <= 5; i++) {
-            if (i <= rating) {
-                stars += '<i class="bi bi-star-fill"></i>';
-            } else if (i - 0.5 <= rating) {
-                stars += '<i class="bi bi-star-half"></i>';
-            } else {
-                stars += '<i class="bi bi-star"></i>';
-            }
-        }
-        return stars;
-    }
-
-    function loadTestimonials() {
-        fetch('/reviews/homepage/0')
-            .then(response => response.json())
-            .then(data => {
-                const list = document.getElementById('testimonials-list');
-                if (data.total_reviews > 0) {
-                    list.innerHTML = data.reviews.map(review => `
-                        <div class="col-md-4">
-                            <div class="testimonial-card">
-                                <div class="testimonial-stars">${renderStars(review.rating)}</div>
-                                <p class="testimonial-text">"${review.comment}"</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="testimonial-author">${review.user_name}</span>
-                                    <span class="testimonial-date">${new Date(review.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
-                } else {
-                    list.innerHTML = '<div class="col-12 text-center text-muted">No reviews yet. Be the first to leave a review!</div>';
-                }
-            });
-    }
-
-    document.getElementById('homepage-review-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
-
-        fetch('{{ route("reviews.store") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                this.reset();
-                loadTestimonials();
-            }
-        })
-        .catch(error => alert('Error submitting review'));
-    });
-
-    loadTestimonials();
-</script>
-
 
 
 <!-- =========================================================
      FOOTER
-========================================================== -->
+========================================================= -->
 
 <footer id="contact">
 
     <div class="container">
 
-        <div class="row g-5 pb-5">
-
+        <div class="row g-5">
 
             <!-- BRAND -->
 
-            <div class="col-sm-6 col-lg-3">
+            <div class="col-lg-4">
 
-                <h3 class="fw-bold">
-                    Swasth Ande
-                </h3>
+                <div class="footer-brand">
+                    Farm Fresh
+                </div>
 
-                <small class="text-white-50">
+                <div class="footer-subtitle">
                     ORGANIC PRODUCTS
-                </small>
+                </div>
 
-                <p class="text-white-50 small mt-3">
+                <p class="footer-description">
+
                     Fresh products, healthy lives.
+                    Bringing quality farm products closer
+                    to homes and businesses.
+
                 </p>
 
 
-                <div class="mt-4">
+                <div class="socials">
 
-                    <a href="#" class="social-link">
+                    <a href="#" class="social">
                         <i class="fa-brands fa-facebook-f"></i>
                     </a>
 
-                    <a href="#" class="social-link">
+                    <a href="#" class="social">
                         <i class="fa-brands fa-instagram"></i>
                     </a>
 
-                    <a href="#" class="social-link">
+                    <a href="#" class="social">
                         <i class="fa-brands fa-whatsapp"></i>
                     </a>
 
-                    <a href="#" class="social-link">
-                        <i class="fa-brands fa-linkedin-in"></i>
+                    <a href="#" class="social">
+                        <i class="fa-brands fa-telegram"></i>
                     </a>
 
                 </div>
@@ -1999,13 +3672,13 @@
             </div>
 
 
-            <!-- QUICK LINKS -->
+            <!-- EXPLORE -->
 
-            <div class="col-sm-6 col-lg-3">
+            <div class="col-6 col-lg-2">
 
-                <h4 class="footer-title">
-                    Quick Links
-                </h4>
+                <div class="footer-title">
+                    Explore
+                </div>
 
                 <ul class="footer-links">
 
@@ -2016,26 +3689,71 @@
                     </li>
 
                     <li>
+                        <a href="{{ route('shoppage') }}">
+                            Shop
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('about') }}">
+                            About Us
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="#products">
                             Products
                         </a>
                     </li>
 
                     <li>
-                        <a href="#why-us">
-                            About Us
+                        <a href="#delivery">
+                            Delivery
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- PRODUCTS -->
+
+            <div class="col-6 col-lg-2">
+
+                <div class="footer-title">
+                    Products
+                </div>
+
+                <ul class="footer-links">
+
+                    <li>
+                        <a href="{{ route('showproduct.Vegetable') }}">
+                            Vegetables
                         </a>
                     </li>
 
                     <li>
-                        <a href="#why-us">
-                            Quality
+                        <a href="{{ route('showproduct.Fruit') }}">
+                            Fruits
                         </a>
                     </li>
 
                     <li>
-                        <a href="#contact">
-                            Contact
+                        <a href="{{ route('showproduct.FreshNut') }}">
+                            Fresh Nuts
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('showproduct.Egg') }}">
+                            Eggs
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('showproduct.Farmanimal') }}">
+                            Farm Animals
                         </a>
                     </li>
 
@@ -2046,65 +3764,70 @@
 
             <!-- CONTACT -->
 
-            <div class="col-sm-6 col-lg-3">
+            <div class="col-lg-4">
 
-                <h4 class="footer-title">
+                <div class="footer-title">
                     Contact Us
-                </h4>
+                </div>
 
-                <ul class="contact-list">
 
-                    <li>
-                        <i class="fa-solid fa-phone"></i>
+                <div class="contact-item">
+
+                    <i class="fa-solid fa-phone"></i>
+
+                    <span>
                         +855 123456789
-                    </li>
+                    </span>
 
-                    <li>
-                        <i class="fa-solid fa-envelope"></i>
+                </div>
+
+
+                <div class="contact-item">
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                    <span>
                         Farm@gmail.com
-                    </li>
+                    </span>
 
-                    <li>
-                        <i class="fa-solid fa-location-dot"></i>
-                        kep,cambodia
-                    </li>
-
-                </ul>
-
-            </div>
+                </div>
 
 
-            <!-- NEWSLETTER -->
+                <div class="contact-item">
 
-            <div class="col-sm-6 col-lg-3">
+                    <i class="fa-solid fa-location-dot"></i>
 
-                <h4 class="footer-title">
-                    Newsletter
-                </h4>
+                    <span>
+                        Kep, Cambodia
+                    </span>
 
-                <p class="small text-white-50">
-                    Subscribe for updates and offers.
-                </p>
+                </div>
 
-                <form
-                    onsubmit="handleSubscribe(event)">
 
-                    <input
-                        type="email"
-                        id="subscribeEmail"
-                        placeholder="Enter your email"
-                        required
-                        class="form-control form-control-sm mb-2">
+                <div class="newsletter">
 
-                    <button
-                        type="submit"
-                        class="btn btn-brand-orange btn-sm w-100">
+                    <div class="footer-title mb-2">
+                        Stay Updated
+                    </div>
 
-                        Subscribe
+                    <form
+                        class="newsletter-form"
+                        onsubmit="event.preventDefault(); showToast('Thank you for subscribing!');">
 
-                    </button>
+                        <input
+                            type="email"
+                            placeholder="Your email address"
+                            required>
 
-                </form>
+                        <button type="submit">
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </button>
+
+                    </form>
+
+                </div>
 
             </div>
 
@@ -2113,7 +3836,8 @@
 
         <div class="copyright">
 
-            © 2026 Swasth Ande. All Rights Reserved.
+            © 2026 Farm Fresh.
+            All Rights Reserved.
 
         </div>
 
@@ -2122,181 +3846,9 @@
 </footer>
 
 
-
-<!-- =========================================================
-     QUOTE MODAL
-========================================================== -->
-
-<div
-    class="modal fade"
-    id="quoteModal"
-    tabindex="-1"
-    aria-hidden="true">
-
-    <div class="modal-dialog modal-dialog-centered">
-
-        <div class="modal-content border-0 rounded-4 shadow">
-
-            <div class="modal-header">
-
-                <div class="d-flex align-items-center gap-2">
-
-                    <div
-                        class="rounded-circle bg-brand-orange text-white d-flex align-items-center justify-content-center"
-                        style="width:35px;height:35px;">
-
-                        <i class="fa-solid fa-egg"></i>
-
-                    </div>
-
-                    <h5 class="modal-title text-brand-green fw-bold">
-
-                        Request Bulk Quote
-
-                    </h5>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal">
-                </button>
-
-            </div>
-
-
-            <div class="modal-body">
-
-                <form
-                    onsubmit="handleQuoteSubmit(event)">
-
-
-                    <!-- NAME -->
-
-                    <div class="mb-3">
-
-                        <label
-                            class="form-label small fw-semibold">
-
-                            Full Name
-
-                        </label>
-
-                        <input
-                            type="text"
-                            id="quoteName"
-                            required
-                            class="form-control">
-
-                    </div>
-
-
-                    <!-- PHONE -->
-
-                    <div class="mb-3">
-
-                        <label
-                            class="form-label small fw-semibold">
-
-                            Phone / WhatsApp Number
-
-                        </label>
-
-                        <input
-                            type="tel"
-                            id="quotePhone"
-                            required
-                            class="form-control">
-
-                    </div>
-
-
-                    <!-- PRODUCT -->
-
-                    <div class="mb-3">
-
-                        <label
-                            class="form-label small fw-semibold">
-
-                            Product Requirement
-
-                        </label>
-
-                        <select
-                            id="modalProductSelect"
-                            class="form-select">
-
-                            <option value="Vegetables">
-                                Vegetables
-                            </option>
-
-                            <option value="Fruits">
-                                Fruits
-                            </option>
-
-                            <option value="Fresh Nuts">
-                                Fresh Nuts
-                            </option>
-
-                            <option value="Juices">
-                                Juices
-                            </option>
-
-                            <option value="Eggs">
-                                Eggs
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <!-- QUANTITY -->
-
-                    <div class="mb-4">
-
-                        <label
-                            class="form-label small fw-semibold">
-
-                            Quantity
-
-                        </label>
-
-                        <input
-                            type="text"
-                            id="quoteQuantity"
-                            placeholder="e.g. 50 boxes daily"
-                            required
-                            class="form-control">
-
-                    </div>
-
-
-                    <button
-                        type="submit"
-                        class="btn btn-brand-orange w-100 py-2 fw-bold">
-
-                        Submit Requirement
-
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-
 <!-- =========================================================
      TOAST
-========================================================== -->
+========================================================= -->
 
 <div id="toast">
 
@@ -2309,101 +3861,147 @@
 </div>
 
 
+<!-- BACK TO TOP -->
+
+<button
+    class="back-top"
+    id="backTop"
+    aria-label="Back to top">
+
+    <i class="fa-solid fa-arrow-up"></i>
+
+</button>
+
 
 <!-- =========================================================
-     BOOTSTRAP JS
-========================================================== -->
+     BOOTSTRAP
+========================================================= -->
 
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-
-
-<!-- =========================================================
-     JAVASCRIPT
-========================================================== -->
 
 <script>
 
     /* =========================================================
-       QUOTE MODAL
-    ========================================================== */
+       PAGE LOADER
+    ========================================================= */
 
-    function openQuoteModal(productName = '') {
+    window.addEventListener('load', function () {
 
-        const modalElement =
-            document.getElementById('quoteModal');
+        setTimeout(() => {
 
-        const select =
-            document.getElementById('modalProductSelect');
+            document
+                .getElementById('pageLoader')
+                .classList.add('hide');
 
-        if (productName) {
-            select.value = productName;
-        }
+        }, 500);
 
-        const modal =
-            bootstrap.Modal.getOrCreateInstance(modalElement);
-
-        modal.show();
-    }
+    });
 
 
     /* =========================================================
-       QUOTE FORM
-    ========================================================== */
+       SCROLL PROGRESS
+    ========================================================= */
 
-    function handleQuoteSubmit(event) {
+    window.addEventListener('scroll', function () {
 
-        event.preventDefault();
+        const scrollTop =
+            document.documentElement.scrollTop ||
+            document.body.scrollTop;
 
-        const name =
-            document.getElementById('quoteName').value.trim();
+        const scrollHeight =
+            document.documentElement.scrollHeight -
+            document.documentElement.clientHeight;
 
-        const phone =
-            document.getElementById('quotePhone').value.trim();
+        const progress =
+            scrollHeight > 0
+                ? (scrollTop / scrollHeight) * 100
+                : 0;
 
-        const product =
-            document.getElementById('modalProductSelect').value;
+        document.getElementById(
+            'scrollProgress'
+        ).style.width = progress + '%';
 
-        const quantity =
-            document.getElementById('quoteQuantity').value.trim();
+    });
 
 
-        if (!name || !phone || !product || !quantity) {
+    /* =========================================================
+       BACK TO TOP
+    ========================================================= */
 
-            showToast('Please fill in all fields.');
+    const backTop =
+        document.getElementById('backTop');
 
-            return;
+    window.addEventListener('scroll', function () {
+
+        if (window.scrollY > 500) {
+
+            backTop.classList.add('show');
+
+        } else {
+
+            backTop.classList.remove('show');
+
         }
 
-
-        const modalElement =
-            document.getElementById('quoteModal');
-
-        const modal =
-            bootstrap.Modal.getInstance(modalElement);
-
-        if (modal) {
-            modal.hide();
-        }
+    });
 
 
-        showToast(
-            'Thank you! Our sales team will contact you shortly.'
+    backTop.addEventListener('click', function () {
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+
+    });
+
+
+    /* =========================================================
+       REVEAL ANIMATION
+    ========================================================= */
+
+    const revealElements =
+        document.querySelectorAll('.reveal');
+
+    const revealObserver =
+        new IntersectionObserver(
+
+            function (entries) {
+
+                entries.forEach(entry => {
+
+                    if (entry.isIntersecting) {
+
+                        entry.target.classList.add('visible');
+
+                        revealObserver.unobserve(
+                            entry.target
+                        );
+
+                    }
+
+                });
+
+            },
+
+            {
+                threshold: .12
+            }
+
         );
 
 
-        document.getElementById('quoteName').value = '';
-        document.getElementById('quotePhone').value = '';
-        document.getElementById('quoteQuantity').value = '';
+    revealElements.forEach(element => {
 
-    }
+        revealObserver.observe(element);
+
+    });
 
 
     /* =========================================================
        TOAST
-    ========================================================== */
+    ========================================================= */
 
     function showToast(message) {
 
@@ -2417,8 +4015,7 @@
 
         toast.classList.add('show');
 
-
-        setTimeout(function () {
+        setTimeout(() => {
 
             toast.classList.remove('show');
 
@@ -2428,74 +4025,463 @@
 
 
     /* =========================================================
-       NEWSLETTER
-    ========================================================== */
+       STAR RENDER
+    ========================================================= */
 
-    function handleSubscribe(event) {
+    function renderStars(rating) {
 
-        event.preventDefault();
+        let stars = '';
 
-        const email =
-            document.getElementById('subscribeEmail').value.trim();
+        for (let i = 1; i <= 5; i++) {
 
+            if (i <= rating) {
 
-        if (!email) {
+                stars +=
+                    '<i class="bi bi-star-fill"></i>';
 
-            showToast('Please enter your email.');
+            } else {
 
-            return;
+                stars +=
+                    '<i class="bi bi-star"></i>';
+
+            }
 
         }
 
-
-        document.getElementById('subscribeEmail').value = '';
-
-        showToast(
-            'Subscribed to Swasth Ande updates!'
-        );
+        return stars;
 
     }
 
 
     /* =========================================================
-       DELIVERY PROCESS
-    ========================================================== */
+       LOAD REVIEWS
+    ========================================================= */
 
-    function openProcessModal() {
+    function loadTestimonials() {
 
-        showToast(
-            'Our delivery process ensures fresh and safe products.'
-        );
+        fetch('/reviews/homepage/0')
+
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error('Failed to load reviews');
+                }
+
+                return response.json();
+
+            })
+
+            .then(data => {
+
+                const list =
+                    document.getElementById(
+                        'testimonials-list'
+                    );
+
+
+                if (
+                    data.total_reviews > 0 &&
+                    data.reviews &&
+                    data.reviews.length
+                ) {
+
+                    list.innerHTML =
+                        data.reviews.map(review => {
+
+                            const name =
+                                review.user_name ||
+                                'Anonymous Customer';
+
+
+                            const avatar =
+                                name
+                                    .charAt(0)
+                                    .toUpperCase();
+
+
+                            const date =
+                                new Date(
+                                    review.created_at
+                                ).toLocaleDateString(
+                                    'en-US',
+                                    {
+                                        month: 'short',
+                                        day: 'numeric',
+                                        year: 'numeric'
+                                    }
+                                );
+
+
+                            return `
+
+                                <div class="col-md-6 col-lg-4 reveal visible">
+
+                                    <div class="testimonial-card">
+
+                                        <div class="testimonial-stars">
+
+                                            ${renderStars(review.rating)}
+
+                                        </div>
+
+
+                                        <p class="testimonial-text">
+
+                                            "${escapeHtml(review.comment)}"
+
+                                        </p>
+
+
+                                        <div class="testimonial-author">
+
+                                            <div class="author-avatar">
+
+                                                ${escapeHtml(avatar)}
+
+                                            </div>
+
+
+                                            <div>
+
+                                                <strong>
+                                                    ${escapeHtml(name)}
+                                                </strong>
+
+                                                <span>
+                                                    ${date}
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            `;
+
+                        }).join('');
+
+                } else {
+
+                    list.innerHTML = `
+
+                        <div class="col-12 text-center">
+
+                            <div class="py-5">
+
+                                <i
+                                    class="fa-regular fa-comment-dots"
+                                    style="
+                                        font-size:45px;
+                                        color:#e47732;
+                                    ">
+                                </i>
+
+                                <p class="text-muted mt-3">
+
+                                    No reviews yet.
+                                    Be the first to share
+                                    your experience!
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.error(error);
+
+                document.getElementById(
+                    'testimonials-list'
+                ).innerHTML = `
+
+                    <div class="col-12 text-center">
+
+                        <div class="py-5">
+
+                            <i
+                                class="fa-solid fa-comment-slash mb-3"
+                                style="
+                                    font-size:35px;
+                                    color:#e47732;
+                                ">
+                            </i>
+
+                            <p class="text-muted">
+
+                                Unable to load reviews.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            });
 
     }
 
 
     /* =========================================================
-       CLOSE MOBILE NAVBAR AFTER CLICK
-    ========================================================== */
+       ESCAPE HTML
+       Protects review text from injecting HTML/JS
+    ========================================================= */
 
-    document.querySelectorAll(
-        '#mainNavbar .nav-link'
-    ).forEach(function (link) {
+    function escapeHtml(value) {
 
-        link.addEventListener('click', function () {
+        const div =
+            document.createElement('div');
 
-            const navbar =
-                document.getElementById('mainNavbar');
+        div.innerText =
+            value ?? '';
 
-            const collapse =
-                bootstrap.Collapse.getInstance(navbar);
+        return div.innerHTML;
 
-            if (collapse) {
-                collapse.hide();
+    }
+
+
+    /* =========================================================
+       REVIEW FORM
+    ========================================================= */
+
+    document
+        .getElementById('homepage-review-form')
+        .addEventListener('submit', function(e) {
+
+            e.preventDefault();
+
+
+            const form = this;
+
+            const submitButton =
+                form.querySelector(
+                    'button[type="submit"]'
+                );
+
+            const originalText =
+                submitButton.innerHTML;
+
+
+            submitButton.disabled = true;
+
+            submitButton.innerHTML = `
+
+                <span
+                    class="spinner-border spinner-border-sm">
+                </span>
+
+                Sending...
+
+            `;
+
+
+            const formData =
+                new FormData(form);
+
+
+            const data =
+                Object.fromEntries(
+                    formData.entries()
+                );
+
+
+            fetch('{{ route("reviews.store") }}', {
+
+                method: 'POST',
+
+                headers: {
+
+                    'Content-Type':
+                        'application/json',
+
+                    'Accept':
+                        'application/json',
+
+                    'X-CSRF-TOKEN':
+                        '{{ csrf_token() }}'
+
+                },
+
+                body:
+                    JSON.stringify(data)
+
+            })
+
+            .then(response => {
+
+                if (!response.ok) {
+
+                    return response
+                        .json()
+                        .then(error => {
+
+                            throw new Error(
+                                error.message ||
+                                'Unable to submit review.'
+                            );
+
+                        });
+
+                }
+
+                return response.json();
+
+            })
+
+            .then(result => {
+
+                if (result.success) {
+
+                    form.reset();
+
+                    loadTestimonials();
+
+                    showToast(
+                        'Thank you for your review!'
+                    );
+
+                } else {
+
+                    showToast(
+                        result.message ||
+                        'Unable to submit review.'
+                    );
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.error(error);
+
+                showToast(
+                    error.message ||
+                    'Error submitting review.'
+                );
+
+            })
+
+            .finally(() => {
+
+                submitButton.disabled = false;
+
+                submitButton.innerHTML =
+                    originalText;
+
+            });
+
+        });
+
+
+    /* =========================================================
+       MOBILE NAVBAR
+    ========================================================= */
+
+    document
+        .querySelectorAll(
+            '#mainNavbar .nav-link'
+        )
+        .forEach(link => {
+
+            link.addEventListener(
+                'click',
+                function() {
+
+                    const navbar =
+                        document.getElementById(
+                            'mainNavbar'
+                        );
+
+                    const collapse =
+                        bootstrap.Collapse
+                            .getInstance(navbar);
+
+                    if (collapse) {
+
+                        collapse.hide();
+
+                    }
+
+                }
+            );
+
+        });
+
+
+    /* =========================================================
+       ACTIVE NAVIGATION
+    ========================================================= */
+
+    const sections =
+        document.querySelectorAll(
+            'section[id]'
+        );
+
+    const navLinks =
+        document.querySelectorAll(
+            '.nav-link[href^="#"]'
+        );
+
+
+    window.addEventListener('scroll', function () {
+
+        let current = 'home';
+
+        sections.forEach(section => {
+
+            const sectionTop =
+                section.offsetTop - 130;
+
+            if (
+                window.scrollY >= sectionTop
+            ) {
+
+                current =
+                    section.getAttribute('id');
+
+            }
+
+        });
+
+
+        navLinks.forEach(link => {
+
+            link.classList.remove('active');
+
+            if (
+                link.getAttribute('href') ===
+                '#' + current
+            ) {
+
+                link.classList.add('active');
+
             }
 
         });
 
     });
 
+
+    /* =========================================================
+       LOAD REVIEWS
+    ========================================================= */
+
+    loadTestimonials();
+
 </script>
 
 </body>
-
 </html>

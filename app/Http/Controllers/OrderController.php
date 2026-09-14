@@ -8,6 +8,22 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+    public function deliveryStatus(Request $request)
+    {
+        $data = $request->validate([
+            'order_ids' => ['required', 'array', 'min:1'],
+            'order_ids.*' => ['integer', 'exists:orders,id'],
+        ]);
+
+        $orders = Order::whereIn('id', $data['order_ids'])
+            ->get(['id', 'delivery_status']);
+
+        return response()->json([
+            'accepted' => $orders->isNotEmpty()
+                && $orders->every(fn (Order $order) => in_array($order->delivery_status, ['accepted', 'completed'], true)),
+        ]);
+    }
+
     /**
      * Store checkout order
      */

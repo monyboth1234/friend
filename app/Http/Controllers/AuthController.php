@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -48,29 +50,43 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
+        // ១. បង្កើត Throttle Key (សម្គាល់តាម Email + IP Address)
+        $throttleKey = Str::lower($request->input('email')) . '|' . $request->ip();
+
+        // ២. ពិនិត្យមើលថាបញ្ចូលខុសលើស ៣ ដង ឬនៅ?
+        if (RateLimiter::tooManyAttempts($throttleKey, 3)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            $minutes = ceil($seconds / 60);
+
+            return back()->withErrors([
+                'email' => "អ្នកបានបញ្ចូលលេខសម្ងាត់ខុសលើស ៣ ដង។ សូមរង់ចាំចំនួន {$minutes} នាទីទៀត ទើបអាចព្យាយាមម្ដងទៀត។",
+            ])->onlyInput('email');
+        }
+
+        // ៣. ផ្ទៀងផ្ទាត់ការ Login
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // // បង្វែរទិសដៅតាម Role
-            // if (Auth::user()->role === 'admin') {
-            //     return redirect()->intended('/dashboard');
-            // }
+            // លុបចំនួនដងដែលសាកល្បងខុសចេញ នៅពេល Login ជោគជ័យ
+            RateLimiter::clear($throttleKey);
 
             // Admin will go to Dashboard
-            if(Auth::user()->role === 'admin'){
+            if (Auth::user()->role === 'admin') {
                 return redirect()->route('dashboard');
             }
 
-
             // Client will go to Homepage
-            if(Auth::user()->role === 'user'){
+            if (Auth::user()->role === 'user') {
                 return redirect()->route('homeforclient');
             }
 
             return redirect()->intended('/dashboard');
         }
 
-        return back()->withErrors([ 
+        // ៤. ប្រសិនបើ Login បរាជ័យ កត់ត្រាចូល RateLimiter (ផ្អាក ៣ នាទី = 180 វិនាទី)
+        RateLimiter::hit($throttleKey, 180);
+
+        return back()->withErrors([
             'email' => 'អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវឡើយ។',
         ])->onlyInput('email');
     }

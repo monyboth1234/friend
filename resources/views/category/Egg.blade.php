@@ -17,8 +17,15 @@
     <style>
         body {
             font-family: 'Kantumruy Pro', sans-serif;
+            font-size: 16px;
             background-color: #f4f6f9;
         }
+
+        .main-content h3 { font-size: 1.75rem; }
+        .main-content h4 { font-size: 1.5rem; }
+        .main-content h5 { font-size: 1.25rem; }
+        .main-content h6 { font-size: 1rem; }
+        .main-content .table, .main-content .form-control, .main-content .form-select, .main-content .btn { font-size: 1rem; }
 
         /* Fixed Sidebar */
         .sidebar {
@@ -66,7 +73,7 @@
         .sidebar .nav-link:hover {
             color: #fff;
             background-color: rgba(255, 255, 255, 0.15);
-            transform: translateX(3px);
+            transform: none;
         }
 
         .sidebar .nav-link.active {
@@ -102,7 +109,7 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .stat-card:hover {
-            transform: translateY(-4px);
+            transform: none;
             box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
         }
 
@@ -114,7 +121,7 @@
             transition: all 0.25s ease-in-out;
         }
         .land-card:hover {
-            transform: translateY(-4px);
+            transform: none;
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08) !important;
             border-color: #198754;
         }
@@ -205,12 +212,25 @@
                         <span>របាយការណ៍ការលក់</span>
                     </a>
                 </li>
+                 <li>
+                    <a href="{{ route('report') }}" class="nav-link sub-nav-link d-flex align-items-center">
+                        <i class="bi bi-star-fill me-2 fs-5"></i>
+                        <span>Report and rate
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('delivery.index') }}" class="nav-link sub-nav-link d-flex align-items-center">
+                        <i class="bi bi-truck me-2 fs-5"></i>
+                        <span>Orders</span>
+                    </a>
+                </li>
 
 
                 <hr class="border-light opacity-25">
 
                 <li class="nav-item">
-                    <a href="{{ route('homepage') }}" class="nav-link d-flex align-items-center">
+                    <a href="{{ route('shoppage') }}" class="nav-link d-flex align-items-center">
                         <i class="fa-solid fa-cart-shopping me-2 fs-5"></i> Shop
                     </a>
                 </li>

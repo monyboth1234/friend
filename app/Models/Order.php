@@ -16,6 +16,7 @@ class Order extends Model
         'postal_code',
         'delivery_date',
         'order_notes',
+        'delivery_status',
         'category',
         'item_name',
         'quantity',

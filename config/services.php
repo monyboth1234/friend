@@ -31,4 +31,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'bakong' => [
+    'api_url'       => env('BAKONG_API_URL', 'https://api-bakong.nbc.gov.kh'),
+    'token'         => env('BAKONG_TOKEN'),
+    'account_id'    => env('BAKONG_ACCOUNT_ID'),
+    'merchant_name' => env('BAKONG_MERCHANT_NAME', 'Farm Fresh'),
+    'merchant_city' => env('BAKONG_MERCHANT_CITY', 'PHNOM PENH'),
+],
+
 ];

@@ -27,26 +27,25 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+
+        // Temporarily commented out because the tables may not exist yet.
+
+        
         View::composer(['dashboard', 'Arable_land.Arable_lands'], function ($view){
             $view->with('totalArea', arable_land::sum('area'));
         });
 
-
         $totalEgg = Egg::sum('qty');
         View::share('totalEgg', $totalEgg);
-
 
         $totalAnimal = Farm_Animal::sum('qty');
         View::share('totalAnimal', $totalAnimal);
 
-
         $totalFreshNut = FreshNut::sum('qty');
         View::share('totalFreshNut', $totalFreshNut);
 
-
         $totalVegetable = Vegetable::sum('qty');
         View::share('totalVegetable', $totalVegetable);
-
 
         $totalFruit = Fruit::sum('qty');
         View::share('totalFruit', $totalFruit);

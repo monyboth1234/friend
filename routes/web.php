@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\ArableLandController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BakongController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientshopController;
+use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\EggController;
 use App\Http\Controllers\FarmAnimalController;
 use App\Http\Controllers\FreshNutController;
@@ -63,6 +66,18 @@ Route::get('/about', function () {
     return view('pages.aboutus');
 })->name('about');
 
+Route::get('/aboutus', function () {
+    return view('pages.aboutus');
+})->name('aboutus');
+
+// Contact
+Route::get('/contact', function () {
+    return view('pages.contact');
+})->name('contact');
+
+Route::post('/contact', [ContactController::class, 'store'])
+    ->name('contact.store');
+
 
 // Cart
 Route::get('/cart', function () {
@@ -88,7 +103,6 @@ Route::middleware('web')->prefix('cart')->name('cart.')->group(function () {
 Route::view('/user/vegetable',  'category.vegetable')->name('user.vegetable');
 Route::view('/user/fruits',     'category.Fruit')->name('user.fruits');
 Route::view('/user/fresh-nuts', 'category.Fresh_Nut')->name('user.fresh-nuts');
-Route::view('/user/juices',     'category.juice')->name('user.juices');
 Route::view('/user/eggs',       'category.Egg')->name('user.eggs');
 
 
@@ -195,12 +209,22 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/dashboard', [UserController::class, 'index'])
         ->name('dashboard');
+
+    Route::post('/register-users-interval', [UserController::class, 'registerUsersWithInterval'])
+        ->name('users.register.interval');
 });
 
 
 // Users
 Route::get('/users', [UserController::class, 'index'])
     ->name('users.index');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/delivery', [DeliveryController::class, 'index'])
+        ->name('delivery.index');
+    Route::put('/delivery/{order}/status', [DeliveryController::class, 'updateStatus'])
+        ->name('delivery.status');
+});
 
 
 // sales-report
@@ -212,6 +236,8 @@ Route::get('/report', [ReviewController::class, 'report'])
     ->name('report');
 
 // Order
+Route::get('/orders/delivery-status', [OrderController::class, 'deliveryStatus'])
+    ->name('orders.delivery-status');
 Route::post('/orders', [OrderController::class, 'store'])
     ->name('orders.store');
 
@@ -229,8 +255,8 @@ Route::get('/showproduct/fruit', function () {
 
 Route::get('/showproduct/freshnut', function () {
     $products = FreshNut::latest()->get();
-    return view('showproduct.Freshnut', compact('products'));
-})->name('showproduct.Freshnut');
+    return view('showproduct.FreshNut', compact('products'));
+})->name('showproduct.FreshNut');
 
 Route::get('/showproduct/egg', function () {
     $products = Egg::latest()->get();
@@ -244,3 +270,26 @@ Route::get('/showproduct/farmanimal', function () {
 
 Route::get('/product/{id}', [ProductController::class, 'show'])
     ->name('product.show');
+
+Route::put('/profile', [UserController::class, 'updateProfile'])
+    ->name('profile.update')
+    ->middleware('auth');
+;
+// Admin routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/delivery', [DeliveryController::class, 'index'])->name('delivery.index');
+    Route::put('/delivery/{order}/status', [DeliveryController::class, 'updateStatus'])->name('delivery.status');
+});
+
+// Public polling endpoint (used by customer checkout)
+Route::get('/orders/delivery-status', [DeliveryController::class, 'deliveryStatus'])
+    ->name('orders.delivery-status');
+
+
+// Generate Bakong QR
+
+Route::get('/bakong/generate', [BakongController::class, 'generate'])
+    ->name('bakong.generate');
+
+Route::get('/bakong/check', [BakongController::class, 'check'])
+    ->name('bakong.check');
