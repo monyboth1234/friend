@@ -1,4 +1,4 @@
-
+{{-- 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2158,4 +2158,4 @@ document.addEventListener(
 </script>
 
 </body>
-</html>
+</html> --}}

@@ -14,6 +14,7 @@ class ShopController extends Controller
     public function index(Request $request)
     {
         $search = trim((string) $request->query('search', ''));
+        $category = $request->query('category');
 
         $filterProducts = function ($query) use ($search) {
             $query->where(function ($productQuery) use ($search) {
@@ -28,13 +29,14 @@ class ShopController extends Controller
         $animalFarms = Farm_Animal::latest()->when($search !== '', $filterProducts)->get();
         $eggs        = Egg::latest()->when($search !== '', $filterProducts)->get();
 
-        return view('pages.homepage', compact(
+        return view('pages.shoppage', compact(
             'vegetables',
             'fruits',
             'freshNuts',
             'animalFarms',
             'eggs',
-            'search'
+            'search',
+            'category'
         ));
     }
 }

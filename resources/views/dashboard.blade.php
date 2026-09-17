@@ -789,6 +789,15 @@
                 </a>
             </li>
 
+            <li>
+                <a href="{{ route('settings') }}"
+                   data-title="Settings"
+                   class="nav-link">
+                    <i class="fa-solid fa-gear me-2 fs-5"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+
         </ul>
     </div>
 

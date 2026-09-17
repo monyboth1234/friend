@@ -8,6 +8,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientshopController;
 use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\EggController;
 use App\Http\Controllers\FarmAnimalController;
 use App\Http\Controllers\FreshNutController;
@@ -104,6 +105,21 @@ Route::view('/user/vegetable',  'category.vegetable')->name('user.vegetable');
 Route::view('/user/fruits',     'category.Fruit')->name('user.fruits');
 Route::view('/user/fresh-nuts', 'category.Fresh_Nut')->name('user.fresh-nuts');
 Route::view('/user/eggs',       'category.Egg')->name('user.eggs');
+
+// Settings
+Route::get('/settings', function () {
+    return view('pages.setting', ['user' => Auth::user()]);
+})->name('settings')->middleware('auth');
+
+Route::put('/settings/profile', [UserController::class, 'updateProfile'])
+    ->name('settings.profile.update')->middleware('auth');
+
+Route::put('/settings/password', [UserController::class, 'updatePassword'])
+    ->name('settings.password.update')->middleware('auth');
+
+// Stock Management
+Route::get('/stock', [StockController::class, 'index'])
+    ->name('stock.index')->middleware('auth');
 
 
 // Reviews (homepage + per-product)
@@ -293,3 +309,13 @@ Route::get('/bakong/generate', [BakongController::class, 'generate'])
 
 Route::get('/bakong/check', [BakongController::class, 'check'])
     ->name('bakong.check');
+
+   
+
+
+Route::delete('/reviews/{id}', [ReviewController::class, 'destroy'])
+    ->name('reviews.delete');
+
+Route::post('/reviews/{id}/reply', [ReviewController::class, 'reply'])
+    ->name('reviews.reply');
+
