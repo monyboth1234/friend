@@ -62,46 +62,58 @@ class BakongController extends Controller
             // =====================================================
             // INDIVIDUAL INFO
             // =====================================================
-            // Exact positional signature from the vendor package:
-            //   #1  string  $bakongAccountID
-            //   #2  string  $merchantName
-            //   #3  string  $merchantCity
-            //   #4  ?string $acquiringBank
-            //   #5  ?string $accountInformation
-            //   #6  ?int    $currency
-            //   #7  float   $amount
-            //   #8  ?string $billNumber
-            //   #9  ?string $storeLabel
-            //   #10 ?string $terminalLabel
-            //   #11 ?string $mobileNumber
-            //   #12 ?string $purposeOfTransaction
-            //   #13 ?string $languagePreference
-            //   #14 ?string $merchantNameAlternateLanguage
-            //   #15 ?string $merchantCityAlternateLanguage
-            //   #16 ?string $upiMerchantAccount
-            // =====================================================
-        $individualInfo = new IndividualInfo(
-    $accountId,        // #1
-    $merchantName,     // #2
-    $merchantCity,     // #3
-    null,              // #4  acquiringBank
-    null,              // #5  accountInformation
-    $khqrCurrency,     // #6  currency
-    (float) $amount,   // #7  amount
-    null,              // #8  billNumber
-    null,              // #9  storeLabel
-    null,              // #10 terminalLabel
-    null,              // #11 mobileNumber
-    null,              // #12 purposeOfTransaction
-    null,              // #13 languagePreference
-    null,              // #14 merchantNameAlternateLanguage
-    null,              // #15 merchantCityAlternateLanguage
-    null               // #16 upiMerchantAccount
-);
+            // FIX: use NAMED arguments matching the package's own
+            // documented API (see https://github.com/fidele007/bakong-khqr-php
+            // and its forks — every published example uses named args,
+            // never a 16-positional constructor). Using named args also
+            // means that if YOUR installed version's IndividualInfo has
+            // different/renamed parameters, PHP throws an immediate,
+            // readable "Unknown named parameter" error here instead of
+            // silently shifting values into the wrong fields and
+            // producing a QR that "generates" but won't scan.
+            //
+            // If this throws that error for you, open
+            // vendor/<package>/src/Models/IndividualInfo.php and match
+            // this call to whatever __construct() actually declares —
+            // paste it here and I'll fix the exact names.
+            $individualInfoArgs = [
+                'bakongAccountID' => $accountId,
+                'merchantName'    => $merchantName,
+                'merchantCity'    => $merchantCity,
+                'currency'        => $khqrCurrency,
+                'amount'          => $amount,
+            ];
+
+            // Some versions (v1.1.0+ of fidele007/bakong-khqr-php) REQUIRE
+            // expirationTimestamp (ms since epoch, as a string) for any
+            // dynamic KHQR (i.e. one that carries an amount). Harmless to
+            // include even on versions where it's optional.
+            if (property_exists(IndividualInfo::class, 'expirationTimestamp')
+                || (new \ReflectionMethod(IndividualInfo::class, '__construct'))
+                    ->getNumberOfParameters() > 0
+            ) {
+                $ctorParams = array_map(
+                    fn ($p) => $p->getName(),
+                    (new \ReflectionMethod(IndividualInfo::class, '__construct'))->getParameters()
+                );
+
+                if (in_array('expirationTimestamp', $ctorParams, true)) {
+                    $individualInfoArgs['expirationTimestamp'] = (string) (
+                        (int) floor(microtime(true) * 1000) + 5 * 60 * 1000 // valid 5 minutes
+                    );
+                }
+            }
+
+            $individualInfo = new IndividualInfo(...$individualInfoArgs);
 
             // =====================================================
             // GENERATE
             // =====================================================
+            // NOTE: every published example calls this STATICALLY —
+            // BakongKHQR::generateIndividual($individualInfo) — with no
+            // token needed (a token is only required for API calls like
+            // checkTransactionByMD5). If `new BakongKHQR($token)` below
+            // throws, switch to the static call form.
             $bakong = new BakongKHQR($token);
             $result = $bakong->generateIndividual($individualInfo);
 
@@ -110,11 +122,10 @@ class BakongController extends Controller
             // =====================================================
             // PARSE THE KHQRResponse WRAPPER
             // =====================================================
-            // The package wraps the response inside a
-            // KHQRResponse object. Its properties are exposed
-            // as a JSON string under the key:
-            //   "KHQR\Models\KHQRResponse"
-            // =====================================================
+            // KHQRResponse exposes plain public "status" and "data"
+            // properties (see package docs) — decodeKhqrResponse's final
+            // fallback (casting to array) already handles this correctly,
+            // left as-is below.
             $decoded = $this->decodeKhqrResponse($result);
 
             if (!is_array($decoded)) {
@@ -226,24 +237,19 @@ class BakongController extends Controller
             $isPaid = false;
             $status = 'PENDING';
 
-            // =====================================================
-            // PARSE RESPONSE
-            // =====================================================
-            // Bakong returns either:
-            //   { responseCode: 0, data: { status: "PAID" } }   (paid)
-            //   { responseCode: 1, data: null }                 (not yet)
-            // =====================================================
-
             $responseCode = null;
             $data         = null;
 
-            if (is_object($result)) {
-                // Preferred: direct properties
+            // checkTransactionByMD5() is typed to return array<string,mixed>
+            // Handle both array (normal) and object (fallback) responses.
+            if (is_array($result)) {
+                $responseCode = $result['responseCode'] ?? null;
+                $data         = $result['data'] ?? null;
+            } elseif (is_object($result)) {
                 if (property_exists($result, 'responseCode')) {
                     $responseCode = $result->responseCode;
                     $data         = $result->data ?? null;
                 } else {
-                    // Fallback: try the KHQRResponse wrapper
                     $decoded = $this->decodeKhqrResponse($result);
 
                     if (is_array($decoded)) {
@@ -293,10 +299,12 @@ class BakongController extends Controller
     }
 
     /**
-     * Decode the KHQRResponse wrapper returned by the
-     * bakong-khqr-php package. The package stores its
-     * payload inside a JSON string under the key
-     * "KHQR\Models\KHQRResponse".
+     * Decode the KHQRResponse wrapper returned by the bakong-khqr-php
+     * package. In every published version, KHQRResponse simply has
+     * public "status" and "data" properties — so (array) $result
+     * already yields the right shape and step 3 below is what actually
+     * runs. Steps 1-2 are speculative fallbacks kept for safety but are
+     * not expected to match a real response.
      */
     private function decodeKhqrResponse($result): ?array
     {
@@ -304,7 +312,6 @@ class BakongController extends Controller
             return null;
         }
 
-        // 1. Try the exact wrapper key
         if (isset($result->{'KHQR\\Models\\KHQRResponse'})) {
             $raw = $result->{'KHQR\\Models\\KHQRResponse'};
             $decoded = json_decode($raw, true);
@@ -314,7 +321,6 @@ class BakongController extends Controller
             }
         }
 
-        // 2. Fallback: scan all properties for a JSON string
         $arr = (array) $result;
 
         foreach ($arr as $value) {
@@ -329,7 +335,6 @@ class BakongController extends Controller
             }
         }
 
-        // 3. Last resort: treat as-is if it already has status/data
         if (isset($arr['status']) || isset($arr['data'])) {
             return $arr;
         }

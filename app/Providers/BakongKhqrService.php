@@ -17,8 +17,8 @@ class BakongKhqrService
         string $billNumber = ''
     ): string {
         $bakongId      = config('services.bakong.account_id');
-        $merchantName  = config('services.bakong.merchant_name');
-        $merchantCity  = config('services.bakong.merchant_city');
+        $merchantName  = $this->sanitizeAscii(config('services.bakong.merchant_name'), 25);
+        $merchantCity  = $this->sanitizeAscii(config('services.bakong.merchant_city'), 15);
 
         // Tag 00: Payload Format Indicator
         $payload = $this->tlv('00', '01');
@@ -27,6 +27,14 @@ class BakongKhqrService
         $payload .= $this->tlv('01', '12');
 
         // Tag 29: Merchant Account Information (Bakong)
+        //
+        // NOTE: double-check this sub-tag order (00/01) against NBC's
+        // official KHQR sample/SDK for your account type. Different
+        // reference implementations disagree on whether sub-00 is a
+        // fixed GUID or the account ID itself — if the CRC fix below
+        // doesn't fully resolve scanning, this is the next thing to
+        // verify against the spec document you were given when you
+        // registered for Bakong.
         $merchantAccount  = $this->tlv('00', config('services.bakong.merchant_id', 'khqr@dev.bakong'));
         $merchantAccount .= $this->tlv('01', $bakongId);
         $payload .= $this->tlv('29', $merchantAccount);
@@ -39,25 +47,35 @@ class BakongKhqrService
         $payload .= $this->tlv('53', $currencyCode);
 
         // Tag 54: Transaction Amount
-        $payload .= $this->tlv('54', number_format($amount, 2, '.', ''));
+        // KHR has no decimal places on Bakong; USD uses 2.
+        $amountString = strtoupper($currency) === 'KHR'
+            ? (string) (int) round($amount)
+            : number_format($amount, 2, '.', '');
+        $payload .= $this->tlv('54', $amountString);
 
         // Tag 58: Country Code
         $payload .= $this->tlv('58', 'KH');
 
         // Tag 59: Merchant Name
-        $payload .= $this->tlv('59', mb_substr($merchantName, 0, 25));
+        $payload .= $this->tlv('59', $merchantName);
 
         // Tag 60: Merchant City
-        $payload .= $this->tlv('60', mb_substr($merchantCity, 0, 15));
+        $payload .= $this->tlv('60', $merchantCity);
 
         // Tag 62: Additional Data (Bill Number)
         if ($billNumber !== '') {
-            $additional = $this->tlv('01', mb_substr($billNumber, 0, 25));
+            $additional = $this->tlv('01', $this->sanitizeAscii($billNumber, 25));
             $payload .= $this->tlv('62', $additional);
         }
 
-        // Tag 63: CRC16 — MUST be computed BEFORE appending 6304
-        $crc = $this->crc16($payload);
+        // Tag 63: CRC16
+        //
+        // FIX: the checksum must be computed over the payload PLUS the
+        // literal "6304" prefix (tag+length of the CRC field itself),
+        // not over the bare payload. This was the bug — every QR you
+        // generated had an invalid checksum because these 4 characters
+        // were missing from the CRC input.
+        $crc = $this->crc16($payload . '6304');
         $payload .= '6304' . $crc;
 
         return $payload;
@@ -85,6 +103,18 @@ class BakongKhqrService
             }
         }
         return strtoupper(str_pad(dechex($crc), 4, '0', STR_PAD_LEFT));
+    }
+
+    /**
+     * KHQR text fields must be plain ASCII. Khmer script, emoji, or
+     * accented characters in merchant name/city/bill number will
+     * silently corrupt the TLV length bytes for that field and can
+     * break parsing for the rest of the string.
+     */
+    private function sanitizeAscii(string $value, int $maxLength): string
+    {
+        $ascii = preg_replace('/[^\x20-\x7E]/', '', $value ?? '');
+        return mb_substr(trim($ascii), 0, $maxLength);
     }
 
     /**

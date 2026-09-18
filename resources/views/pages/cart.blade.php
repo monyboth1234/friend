@@ -1939,6 +1939,42 @@
             box-shadow: 0 17px 40px rgba(255,166,107,.5), 0 0 50px rgba(255,166,107,.3);
         }
 
+        .bkqr-done {
+            width: 100%;
+            padding: 13px 20px;
+            border-radius: 12px;
+            border: 1px solid #dfe7e2;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .bkqr-done:hover {
+            background: var(--bg);
+            color: var(--green-700);
+            border-color: var(--green-700);
+        }
+
+        [data-theme="dark"] .bkqr-done {
+            background: transparent;
+            color: #8ba394;
+            border-color: rgba(125,212,154,.15);
+        }
+
+        [data-theme="dark"] .bkqr-done:hover {
+            background: rgba(125,212,154,.08);
+            color: #eaf5ee;
+            border-color: #7dd49a;
+        }
+
         .bkqr-expired {
             position: absolute;
             inset: 0;
@@ -2591,11 +2627,17 @@
                             </span>
                         </div>
 
-                        <!-- CONFIRM -->
-                        <button type="button" class="bkqr-confirm" id="btnPaid">
-                            <i class="bi bi-check-circle me-1"></i>
-                            I've Paid — Check Payment
-                        </button>
+<!-- CONFIRM -->
+                    <button type="button" class="bkqr-confirm" id="btnPaid">
+                        <i class="bi bi-check-circle me-1"></i>
+                        I've Paid — Check Payment
+                    </button>
+
+                    <!-- DONE -->
+                    <button type="button" class="bkqr-done" id="btnQrDone" style="display:none;">
+                        <i class="bi bi-check2 me-1"></i>
+                        Done
+                    </button>
 
                     </main>
                 </div>
@@ -3313,6 +3355,9 @@ async function generateBakongQr(amount) {
         if (statusLoader) statusLoader.style.display = '';
         if (paidButton) paidButton.disabled = false;
 
+        const doneButton = document.getElementById('btnQrDone');
+        if (doneButton) doneButton.style.display = 'flex';
+
         startBakongPolling(currentMd5);
 
     } catch (error) {
@@ -3634,6 +3679,15 @@ function openQrPaymentModal(amount) {
         clearInterval(qrTimerInterval);
         clearInterval(bakongPollingTimer);
     }, { once: true });
+
+    const doneButton = document.getElementById('btnQrDone');
+    if (doneButton) {
+        doneButton.onclick = function () {
+            const qrInstance = bootstrap.Modal.getInstance(qrModalElement);
+            if (qrInstance) qrInstance.hide();
+        };
+        doneButton.style.display = 'none';
+    }
 
     if (paidButton) {
         paidButton.onclick = async () => {

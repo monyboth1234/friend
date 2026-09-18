@@ -25,6 +25,7 @@ use App\Models\Fruit;
 use App\Models\FreshNut;
 use App\Models\Egg;
 use App\Models\Farm_Animal;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -304,12 +305,17 @@ Route::get('/orders/delivery-status', [DeliveryController::class, 'deliveryStatu
 
 // Generate Bakong QR
 
-Route::get('/bakong/generate', [BakongController::class, 'generate'])
-    ->name('bakong.generate');
 
-Route::get('/bakong/check', [BakongController::class, 'check'])
-    ->name('bakong.check');
 
+Route::get('/bakong/generate', [
+    BakongController::class,
+    'generate'
+])->name('bakong.generate');
+
+Route::get('/bakong/check', [
+    BakongController::class,
+    'check'
+])->name('bakong.check');
    
 
 
